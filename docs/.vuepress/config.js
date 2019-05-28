@@ -1,11 +1,12 @@
 module.exports = {
     title: 'GENDALI',
-    description: '编程 学习博客',
+    description: 'stay hungry, stay foolish',
     head: [
-        ['link', { rel: 'icon', href: `./favicon.ico` }]// 增加一个自定义的 favicon(网页标签的图标)
+        ['link', { rel: 'icon', href: `/favicon.ico` }]// 增加一个自定义的 favicon(网页标签的图标)
       ],
     base: '/lidagen.github.io/',
     themeConfig: {
+        logo: '/img/1.jpg',
         sidebarDepth: 2,
         lastUpdated: 'Last Updated',
         nav:[

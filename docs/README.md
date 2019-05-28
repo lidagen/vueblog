@@ -1,5 +1,6 @@
 ---
 home: true
+heroImage: /back1.jpg
 actionText: 前往 →
 actionLink: /guide/
 features:
