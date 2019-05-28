@@ -1,4 +1,4 @@
-## vue element-ui dialog 弹出框使用
+### vue element-ui dialog 弹出框使用
 ::: tip
 构建页面时，需要按钮弹出一个新的页面进行编辑，此时需要用到dialog弹出框，考虑复用，把弹出框单独提出来使用。
 ::: 

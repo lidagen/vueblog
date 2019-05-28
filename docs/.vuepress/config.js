@@ -1,13 +1,16 @@
 module.exports = {
     title: 'GENDALI',
     description: '编程 学习博客',
+    head: [
+        ['link', { rel: 'icon', href: `./favicon.ico` }]// 增加一个自定义的 favicon(网页标签的图标)
+      ],
     base: '/lidagen.github.io/',
     themeConfig: {
         sidebarDepth: 2,
         lastUpdated: 'Last Updated',
         nav:[
-            { text: '主页', link: '/' }, // 导航条
-            { text: '组件文档', link: '/baseComponents/' },
+            { text: '主页', link: '/guide/vue/vue1' }, // 导航条
+            { text: 'vuepress', link: '/nav/vuepress' },
             { text: '知识库', link: '/knowledge/' },
             { text: 'link',        // 这里是下拉列表展现形式。
               items: [
@@ -18,12 +21,13 @@ module.exports = {
         ],
         sidebar: [
             {
-                title: 'vue', // 侧边栏名称
+                title: 'vue.js', // 侧边栏名称
                 collapsable: true, // 可折叠
                 children: [
                 ['/guide/vue/vue1', 'dialog 弹出框使用'],// 你的md文件地址,后一个为标题
                 ['/guide/vue/vue2', 'vue 动态刷新页面'],
-                ['/guide/vue/vue3', 'vue 封装分页组件']
+                ['/guide/vue/vue3', 'vue 封装分页组件'],
+                ['/guide/vue/vue4', 'vue 动态菜单'],
                 ]
             },
             {

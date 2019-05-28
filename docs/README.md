@@ -3,12 +3,12 @@ home: true
 actionText: 前往 →
 actionLink: /guide/
 features:
-- title: 布局类组件
-  details: 基本组件，为常用组件提供快速，可用的组件
-- title: 可视化组件
-  details: 积累将数据可视化的业务组件
-- title: 知识库
-  details: 积累前端相关的知识，涵盖 vue、react、koa2、nodejs 相关的知识点
+- title: vue
+  details: vue基本用法，为常用组件提供快速，可用的组件
+- title: java
+  details: 积累java基础知识
+- title: 中间件
+  details: 积累后端相关的知识，涵盖 activiti、shiro、mq 相关的知识点
 ---
 
 
