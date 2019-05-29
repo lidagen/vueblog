@@ -35,6 +35,8 @@ module.exports = {
                 ['/guide/vue/vue2', 'vue 动态刷新页面'],
                 ['/guide/vue/vue3', 'vue 封装分页组件'],
                 ['/guide/vue/vue4', 'vue 动态菜单'],
+                ['/guide/vue/byValue', 'vue 常用传值'],
+               
                 ]
             },
             {
