@@ -2,7 +2,7 @@
 home: true
 heroImage: /back1.jpg
 actionText: 前往 →
-actionLink: /guide/vue/vue3
+actionLink: /guide
 features:
 - title: vue
   details: vue基本用法，为常用组件提供快速，可用的组件
