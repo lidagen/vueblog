@@ -10,13 +10,19 @@ module.exports = {
         sidebarDepth: 2,
         lastUpdated: 'Last Updated',
         nav:[
-            { text: '主页', link: '/guide/vue/vue1' }, // 导航条
+            { text: '主页', link: '/' }, // 导航条
             { text: 'vuepress', link: '/nav/vuepress' },
-            { text: '知识库', link: '/knowledge/' },
+            { text: '杂',
+            items:[
+                {text:'GIT命令',  link: '/knowledge/git'},
+                {text:'python+django',  link: '/knowledge/django'}
+            ]
+             },
             { text: 'link',        // 这里是下拉列表展现形式。
               items: [
                 { text: 'github', link: 'https://github.com/lidagen' },
                 { text: 'gitee', link: 'https://gitee.com/GENDALI' },
+                { text: 'csdn', link: 'https://blog.csdn.net/ws346348183' },
               ]
             }
         ],
