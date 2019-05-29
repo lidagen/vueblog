@@ -15,7 +15,7 @@ module.exports = {
             { text: '杂',
             items:[
                 {text:'GIT命令',  link: '/knowledge/git'},
-                {text:'python+django',  link: '/knowledge/django'}
+                {text:'python+django',  link: '/knowledge/django'},
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
@@ -46,6 +46,9 @@ module.exports = {
             {
                 title:'mysql',
                 collapsable: true, // 可折叠
+                children: [
+                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题   
+                ]
             },
             {
                 title:'中间件',
