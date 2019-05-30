@@ -16,6 +16,7 @@ module.exports = {
             items:[
                 {text:'GIT命令',  link: '/knowledge/git'},
                 {text:'python+django',  link: '/knowledge/django'},
+                {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
