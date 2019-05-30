@@ -31,6 +31,8 @@ module.exports = {
                 title: 'vue.js', // 侧边栏名称
                 collapsable: true, // 可折叠
                 children: [
+                ['/guide/', 'vue基础'],
+                ['/guide/vuerouter', 'vue router'],
                 ['/guide/vue/vue1', 'dialog 弹出框使用'],// 你的md文件地址,后一个为标题
                 ['/guide/vue/vue2', 'vue 动态刷新页面'],
                 ['/guide/vue/vue3', 'vue 封装分页组件'],
