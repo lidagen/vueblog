@@ -34,7 +34,8 @@ module.exports = {
                 children: [
                 ['/guide/', 'vue基础'],
                 ['/guide/vuerouter', 'vue router'],
-                ['/guide/axios', 'axios 跨域'],
+                ['/guide/vuex', 'Vuex'],
+                ['/guide/axios', 'Axios 跨域'],
                 ['/guide/vue/vue1', 'dialog 弹出框使用'],// 你的md文件地址,后一个为标题
                 ['/guide/vue/vue2', 'vue 动态刷新页面'],
                 ['/guide/vue/vue3', 'vue 封装分页组件'],
