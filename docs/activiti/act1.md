@@ -1,4 +1,3 @@
-## IDEA+Activiti下的helloWorld 
 
 ### IDEA 插件安装
 + IDEA 的Plugins搜索 actiBPM安装 重启IDEA

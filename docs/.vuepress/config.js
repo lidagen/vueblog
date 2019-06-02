@@ -56,7 +56,7 @@ module.exports = {
                 ]
             },
             {
-                title:'中间件',
+                title:'Activiti',
                 collapsable: true,
                 children:[
                     ['/activiti/act1','IDEA下的Activiti HelloWord']
