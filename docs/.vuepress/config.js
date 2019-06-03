@@ -47,6 +47,9 @@ module.exports = {
             {
                 title:'java基础',
                 collapsable: true, // 可折叠
+                children:[
+                    ['/collection/ArrayList','ArrayList 源码'],
+                ]
             },
             {
                 title:'javaWeb',
