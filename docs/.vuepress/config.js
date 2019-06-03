@@ -69,7 +69,8 @@ module.exports = {
                 title:'Activiti',
                 collapsable: true,
                 children:[
-                    ['/activiti/act1','IDEA下的Activiti HelloWord']
+                    ['/activiti/act1','IDEA下的Activiti HelloWord'],
+                    ['/activiti/actDB','流程定义的CRUD'],
                 ] 
             },
         ]
