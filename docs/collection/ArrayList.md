@@ -18,6 +18,14 @@
             return Collections.iteratorBinarySearch(list, key);
     }
     ````
++ `ArrayList` 实现了 `Cloneable`接口。支持克隆
+::: tip
+  + `cloneable`其实就是一个标记接口，只有实现这个接口后，然后在类中重写Object中的clone方法，然后通过类调用clone方法才能克隆成功.
+  + 如何判断类实现了 `cloneable`接口?  
+    **native**关键字,每一个native方法在jvm中都有一个同名的实现体，native方法在逻辑上的判断都是由实现体实现的.
+    判断是否实现cloneable接口，是在调用jvm中的实现体时进行判断的。
+
+:::
 
 + `ArrayList`是默认大小为 10 的数组,扩容为原来容量的 1.5 倍。由于其扩容是个**消耗较大的操作**,所以在**已知数据大小**的前提下,指定容器大小。或者在需要扩容时,手动调用 `public void ensureCapacity(int minCapacity) {}`方法。
 
