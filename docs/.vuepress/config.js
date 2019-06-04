@@ -17,6 +17,8 @@ module.exports = {
                 {text:'GIT命令',  link: '/knowledge/git'},
                 {text:'python+django',  link: '/knowledge/django'},
                 {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
+                {text:'npm 配置',  link: '/knowledge/npm'},
+                {text:'linux 常用命令',  link: '/knowledge/linux'},
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
@@ -49,6 +51,7 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/collection/ArrayList','ArrayList 源码'],
+                    ['/collection/LinkedList','LinkedList 源码'],
                 ]
             },
             {

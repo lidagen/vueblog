@@ -37,7 +37,7 @@
     }
   ````
   - **增加**时,*add(element)* 会先确认容量是否足够,不够需要扩容。*add(index,element)* 查询后添加,插入位置后的元素都需要往后移一位。需要调用 *System.arraycopy()* 方法对数组进行复制操作。<font color=#900000 >复杂度 O(n)</font>
-  - **删除**时,也会移动删除位置后的元素,调用* System.arraycopy()*,对数组进行重排。 <font color=#900000 >复杂度 O(n)</font>
+  - **删除**时,也会移动删除位置后的元素,调用 *System.arraycopy()*,对数组进行重排。 <font color=#900000 >复杂度 O(n)</font>
   ````java
   public void add(int index, E element) {
         rangeCheckForAdd(index);
@@ -293,6 +293,70 @@
     return elementData(index); //下标取数据
   }
   ````
++ **迭代器 ListIterator**
+````java
+public ListIterator<E> listIterator() {
+    return new ListItr(0);
+}
+
+private class ListItr extends Itr implements ListIterator<E> {
+    ListItr(int index) {
+        super();
+        cursor = index;
+    }
+
+    public boolean hasPrevious() {
+        return cursor != 0;
+    }
+
+    public int nextIndex() {
+        return cursor;
+    }
+
+    public int previousIndex() {
+        return cursor - 1;
+    }
+
+    @SuppressWarnings("unchecked")
+    public E previous() {
+        checkForComodification();
+        int i = cursor - 1;
+        if (i < 0)
+            throw new NoSuchElementException();
+        Object[] elementData = ArrayList.this.elementData;
+        if (i >= elementData.length)
+            throw new ConcurrentModificationException();
+        cursor = i;
+        return (E) elementData[lastRet = i];
+    }
+
+    public void set(E e) {
+        if (lastRet < 0)
+            throw new IllegalStateException();
+        checkForComodification();
+
+        try {
+            ArrayList.this.set(lastRet, e);
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+
+    public void add(E e) {
+        checkForComodification();
+
+        try {
+            int i = cursor;
+            ArrayList.this.add(i, e);
+            cursor = i + 1;
+            lastRet = -1;
+            expectedModCount = modCount;
+        } catch (IndexOutOfBoundsException ex) {
+            throw new ConcurrentModificationException();
+        }
+    }
+}
+````  
   
   ### 总结
   + **修改**和**查询**直接根据数组下标操作,是高效的,尾部追加的**增加**`add(E e)`,不扩容情况下也是高效的。
