@@ -19,7 +19,7 @@ module.exports = {
                 {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
-                {text:'关于我',  link: '/knowledge/aboutMe'},
+               
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
@@ -27,6 +27,7 @@ module.exports = {
                 { text: 'github', link: 'https://github.com/lidagen' },
                 { text: 'gitee', link: 'https://gitee.com/GENDALI' },
                 { text: 'csdn', link: 'https://blog.csdn.net/ws346348183' },
+                {text:'关于我',  link: '/knowledge/aboutMe'},
               ]
             }
         ],
