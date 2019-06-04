@@ -76,6 +76,8 @@ module.exports = {
                 children:[
                     ['/activiti/act1','IDEA下的Activiti HelloWord'],
                     ['/activiti/actDB','流程定义的CRUD'],
+                    ['/activiti/actControl','流程实例的执行'],
+                    ['/activiti/actVariable','流程变量'],
                 ] 
             },
         ]

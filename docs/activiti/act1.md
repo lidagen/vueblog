@@ -1,11 +1,11 @@
 
-### IDEA 插件安装
+## IDEA 插件安装
 + IDEA 的Plugins搜索 actiBPM安装 重启IDEA
 
 + IDEA 安装路径下bin目录，**idea.exe.vmoptions** 与 **idea64.exe.vmoptions** 
 下,分别加入 `-Dfile.encoding=UTF-8`
 
-### 创建项目，导入依赖
+## 创建项目，导入依赖
 + 新建springboot 项目,加入maven依赖
 ````xml
 <dependency>
@@ -56,7 +56,7 @@
 </dependency>
 ````
 
-### 画流程图
+## 画流程图
 
 + `resource` 目录下,新建 activiti.cfg.xml
 ````xml
@@ -93,7 +93,7 @@
 
   + Rename改回bpmn文件
 
-### 流程引擎对象
+## 流程引擎对象
 ````java
  ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 ````
@@ -119,7 +119,7 @@
   TaskService task = processEngine.getTaskService();
   ````
 
-### 流程流转过程
+## 流程流转过程
 ````java
 package com.example.activiti;
 
