@@ -1,0 +1,1 @@
+<img :src="$withBase('/img/vx.jpg')" alt="dock" width = "400" height = "500" >

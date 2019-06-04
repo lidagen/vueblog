@@ -8,7 +8,7 @@ module.exports = {
     themeConfig: {
         logo: '/img/1.jpg',
         sidebarDepth: 2,
-        lastUpdated: 'Last Updated',
+       // lastUpdated: 'Last Updated',
         nav:[
             { text: '主页', link: '/' }, // 导航条
             { text: 'vuepress', link: '/nav/vuepress' },
@@ -19,6 +19,7 @@ module.exports = {
                 {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
+                {text:'关于我',  link: '/knowledge/aboutMe'},
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
