@@ -3,7 +3,7 @@
 ### 概述
 
 + `ArrayList` 是一个 **动态数组**,其底层是数组。它实现了 `AbstractList` `List` `RandomAccess` `Cloneable` `java.io.Serializable`
-几个接口、实现类。
+几个接口、抽象类。
 
 + `ArrayList` 继承了 `AbstractList`,实现了 `List` 。它是一个数组队列，提供了相关的*添加*、*删除*、*修改*、*遍历*等功能
 
