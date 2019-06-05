@@ -362,3 +362,6 @@ private class ListItr extends Itr implements ListIterator<E> {
   + **修改**和**查询**直接根据数组下标操作,是高效的,尾部追加的**增加**`add(E e)`,不扩容情况下也是高效的。
 
   + **增加**会因为**扩容**导致数组复制, 以及**增加，删除**都会调用`System.arraycopy`实现数组之间的复制。相对低效
+
+
+ <Valine></Valine>

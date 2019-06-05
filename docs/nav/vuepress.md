@@ -158,3 +158,88 @@ cd -
 #### 设置
 在 GitHub 项目点击 Setting 按钮，找到 GitHub Pages - Source，选择 gh-pages 分支，点击 Save 按钮后，静静地等待它部署完成即可。
 
+### 安装评论系统-Valine
+
+#### 注册
++ [注册Valine](https://valine.js.org/quickstart.html)
++ 创建应用获取`appID` `AppKey`
+
+#### 安装Valine
+````sh
+# Install leancloud's js-sdk
+npm install leancloud-storage --save
+
+# Install valine
+npm install valine --save
+````
+
+#### 自定义组件
++ `.vuepress/components` 目录中创建文件`Valine.vue`
+
+````html
+<template>
+  <section style="border-top: 2px solid #eaecef;padding-top:1rem;margin-top:2rem;">
+    <div>
+      <!-- id 将作为查询条件 -->
+      <span class="leancloud-visitors"
+            data-flag-title="Your Article Title">
+        <em class="post-meta-item-text">阅读量： </em>
+        <i class="leancloud-visitors-count"></i>
+      </span>
+    </div>
+    <h3>
+      <a href="javascript:;"></a>
+      评 论：
+    </h3>
+    <div id="vcomments"></div>
+  </section>
+</template>
+
+<script>
+export default {
+  name: 'Valine',
+  mounted: function () {
+    // require window
+    const Valine = require('valine');
+    if (typeof window !== 'undefined') {
+      document.getElementsByClassName('leancloud-visitors')[0].id
+        = window.location.pathname
+      this.window = window
+      window.AV = require('leancloud-storage')
+    }
+
+    new Valine({
+      el: '#vcomments',
+      appId: 'XXXXXXXXXXXXX',// your appId
+      appKey: 'XXXXXXXXXXXXX', // your appKey
+      notify: false,
+      verify: false,
+      path: window.location.pathname,
+      visitor: true,
+      avatar: 'mm',
+      placeholder: 'write here'
+    });
+  },
+}
+</script>
+````
+
+#### 配置
++ `.vuepress/config.js`配置文件中加入
+````js
+ plugins: [
+    [
+      '@vuepress/register-components',
+      {
+        componentsDir: './components'
+      }
+    ]
+  ]
+````
+
+#### 使用
+
+md 文件中最后一行使用这个标签 
+````html
+<Valine></Valine>
+````

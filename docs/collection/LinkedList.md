@@ -498,3 +498,5 @@ private class ListItr implements ListIterator<E> {
 + 对于有 **(int index)** 的操作,都要 *node(int index)* 循环,根据`next` `prev`指向查找下标index的元素  
 + 越靠近中间的数据获取速度越慢  
 + LinkedList 查询慢是因为数据在内存中是**不连续的**,循环迭代查找起来就比较慢。 
+
+<Valine></Valine>

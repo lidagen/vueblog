@@ -1,10 +1,18 @@
 module.exports = {
     title: 'GENDALI',
-    description: 'stay hungry, stay foolish',
+    description: '积跬步。',
     head: [
         ['link', { rel: 'icon', href: `/favicon.ico` }]// 增加一个自定义的 favicon(网页标签的图标)
       ],
     base: '/lidagen.github.io/',
+    plugins: [
+        [
+            '@vuepress/register-components',
+            {
+                componentsDir: './components'
+            }
+        ]
+    ],
     themeConfig: {
         logo: '/img/1.jpg',
         sidebarDepth: 2,
