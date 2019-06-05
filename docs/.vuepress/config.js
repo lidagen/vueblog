@@ -54,6 +54,7 @@ module.exports = {
                 children:[
                     ['/collection/ArrayList','ArrayList 源码'],
                     ['/collection/LinkedList','LinkedList 源码'],
+                    ['/collection/HashMap','HashMap 源码'],
                 ]
             },
             {
