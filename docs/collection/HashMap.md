@@ -179,4 +179,167 @@ final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
 }
 ````
 ### API
+
++ **增**
+  - <font color=#A23400 >put(K key, V value)</font>
+  ```` java
+  public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+  }
+  // putVal
+  final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                boolean evict) {
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    if ((p = tab[i = (n - 1) & hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else {
+        Node<K,V> e; K k;
+        if (p.hash == hash &&
+            ((k = p.key) == key || (key != null && key.equals(k))))
+            e = p;
+        else if (p instanceof TreeNode)
+            e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+        else {
+            for (int binCount = 0; ; ++binCount) {
+                if ((e = p.next) == null) {
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    break;
+                }
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    break;
+                p = e;
+            }
+        }
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value;
+            afterNodeAccess(e);
+            return oldValue;
+        }
+    }
+    ++modCount;
+    if (++size > threshold)
+        resize();
+    afterNodeInsertion(evict);
+    return null;
+  }
+  ````
+  - <font color=#A23400 >putAll(Map<? extends K, ? extends V> m)</font>
+  ````java
+  public void putAll(Map<? extends K, ? extends V> m) {
+    putMapEntries(m, true);
+  }
+  ````
++ **删**
+  - <font color=#A23400>remove(Object key)</font>
+  ````java
+  public V remove(Object key) {
+    Node<K,V> e;
+    return (e = removeNode(hash(key), key, null, false, true)) == null ?
+        null : e.value;
+  }
+  //removeNode
+  final Node<K,V> removeNode(int hash, Object key, Object value,
+                               boolean matchValue, boolean movable) {
+    Node<K,V>[] tab; Node<K,V> p; int n, index;
+    if ((tab = table) != null && (n = tab.length) > 0 &&
+        (p = tab[index = (n - 1) & hash]) != null) {
+        Node<K,V> node = null, e; K k; V v;
+        if (p.hash == hash &&
+            ((k = p.key) == key || (key != null && key.equals(k))))
+            node = p;
+        else if ((e = p.next) != null) {
+            if (p instanceof TreeNode)
+                node = ((TreeNode<K,V>)p).getTreeNode(hash, key);
+            else {
+                do {
+                    if (e.hash == hash &&
+                        ((k = e.key) == key ||
+                            (key != null && key.equals(k)))) {
+                        node = e;
+                        break;
+                    }
+                    p = e;
+                } while ((e = e.next) != null);
+            }
+        }
+        if (node != null && (!matchValue || (v = node.value) == value ||
+                                (value != null && value.equals(v)))) {
+            if (node instanceof TreeNode)
+                ((TreeNode<K,V>)node).removeTreeNode(this, tab, movable);
+            else if (node == p)
+                tab[index] = node.next;
+            else
+                p.next = node.next;
+            ++modCount;
+            --size;
+            afterNodeRemoval(node);
+            return node;
+        }
+    }
+    return null;
+  }
+  ````
+  - <font color=#A23400> remove(Object key, Object value)</font>  
+  ````java
+  public boolean remove(Object key, Object value) {
+      return removeNode(hash(key), key, value, true, true) != null;
+  }
+  ````
+    - <font color=#A23400>clear()</font>  
+  ````java
+  public void clear() {
+     Node<K,V>[] tab;
+     modCount++;
+     if ((tab = table) != null && size > 0) {
+         size = 0;
+         for (int i = 0; i < tab.length; ++i)
+            tab[i] = null;
+      }
+   }
+  ````
+
++ **改**
+  - <font color=#A23400>replace(K key, V oldValue, V newValue)</font> 
+  ````java
+  public boolean replace(K key, V oldValue, V newValue) {
+        Node<K,V> e; V v;
+        if ((e = getNode(hash(key), key)) != null &&
+            ((v = e.value) == oldValue || (v != null && v.equals(oldValue)))) {
+            e.value = newValue;
+            afterNodeAccess(e);
+            return true;
+        }
+        return false;
+    }
+  ````
+  - <font color=#A23400> replace(K key, V value)</font>
+  ````java
+  public V replace(K key, V value) {
+      Node<K,V> e;
+      if ((e = getNode(hash(key), key)) != null) {
+          V oldValue = e.value;
+          e.value = value;
+          afterNodeAccess(e);
+          return oldValue;
+      }
+      return null;
+  }
+  ````  
+   
++ **查**
+  - <font color=#A23400>get(Object key)</font>  
+  ```java
+  public V get(Object key) {
+        Node<K,V> e;
+        return (e = getNode(hash(key), key)) == null ? null : e.value;
+    }
+  ```
+
 ### 总结 
