@@ -8,7 +8,7 @@
     "dev": "vuepress dev docs",
     "build": "vuepress build docs",
     "deploy": "deploy.sh",
-    "bloggit": "./bolgit.sh"
+    "blogit": "blogit.sh"
   },
   "author": "",
   "license": "ISC",
