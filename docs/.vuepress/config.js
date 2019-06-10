@@ -25,6 +25,7 @@ module.exports = {
                 {text:'GIT命令',  link: '/knowledge/git'},
                 {text:'python+django',  link: '/knowledge/django'},
                 {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
+                {text:'babel es6转换es5',  link: '/knowledge/es6Trnsferes5'},
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
                
