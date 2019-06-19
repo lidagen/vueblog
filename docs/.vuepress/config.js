@@ -42,7 +42,7 @@ module.exports = {
         ],
         sidebar: [
             {
-                title: 'vue.js', // 侧边栏名称
+                title: 'VUE', // 侧边栏名称
                 collapsable: true, // 可折叠
                 children: [
                 ['/guide/', 'vue基础'],
@@ -58,7 +58,7 @@ module.exports = {
                 ]
             },
             {
-                title:'java基础',
+                title:'JAVA基础',
                 collapsable: true, // 可折叠
                 children:[
                     ['/collection/ArrayList','ArrayList 源码'],
@@ -67,14 +67,35 @@ module.exports = {
                 ]
             },
             {
-                title:'javaWeb',
+                title:'Spring',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/spring/springInAction','Spring In Action 4'],
+                ]
+            },
+            {
+                title:'REDIS',
+                collapsable: true, // 可折叠
+                children:[
+                   
+                ]
+            },
+            {
+                title:'Nginx',
+                collapsable: true, // 可折叠
+                children:[
+                   
+                ]
+            },
+            {
+                title:'JAVA WEB',
                 collapsable: true, // 可折叠
                 children:[
                     ['/javaweb/权限设计','权限设计'],
                 ]
             },
             {
-                title:'mysql',
+                title:'MySQL',
                 collapsable: true, // 可折叠
                 children: [
                     ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题   
