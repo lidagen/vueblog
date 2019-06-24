@@ -61,6 +61,7 @@ module.exports = {
                 title:'JAVA基础',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/collection/JDK8Lambda','JDK8 函数式编程'],
                     ['/collection/ArrayList','ArrayList 源码'],
                     ['/collection/LinkedList','LinkedList 源码'],
                     ['/collection/HashMap','HashMap 源码'],
