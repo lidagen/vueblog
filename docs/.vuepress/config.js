@@ -93,6 +93,7 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/javaweb/权限设计','权限设计'],
+                    ['/javaweb/servlet','Java Servlet'],
                 ]
             },
             {
