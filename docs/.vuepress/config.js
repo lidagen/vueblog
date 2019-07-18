@@ -62,6 +62,7 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/collection/JDK8Lambda','JDK8 函数式编程'],
+                    ['/collection/ServletSourceCode','Servlet 源码分析'],
                     ['/collection/ArrayList','ArrayList 源码'],
                     ['/collection/LinkedList','LinkedList 源码'],
                     ['/collection/HashMap','HashMap 源码'],

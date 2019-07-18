@@ -7,6 +7,9 @@ cat xxx.log |grep '关键字' --color
 
 // (显示日志里匹配字串那行以及前后5行)
 cat xxx.log | grep -C 5 '关键字'
+
+//全局搜索关键字
+find ./ ! -name "*[0-9]*" | xargs grep --color '关键字'
 ````
 
 + tail查看日志
