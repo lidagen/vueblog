@@ -507,3 +507,5 @@ public interface ServletContextListener extends EventListener {
 ````
 + 应用启动时，ServletContext进行初始化，Servlet容器会自动调用正在监听ServletContext的ServletContextListener的contextInitialized 
 + 当应用停止时，ServletContext被销毁，此时Servlet容器也会自动地调用正在监听ServletContext的ServletContextListener的 contextDestroyed(ServletContextEvent var1)方法。
+
+ <Valine></Valine>

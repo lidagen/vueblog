@@ -72,6 +72,7 @@ module.exports = {
                 title:'Spring',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                     ['/spring/springInAction','Spring In Action 4'],
                 ]
             },
