@@ -73,14 +73,14 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
-                    ['/spring/springInAction','Spring In Action 4'],
+                
                 ]
             },
             {
-                title:'REDIS',
+                title:'读书笔记',
                 collapsable: true, // 可折叠
                 children:[
-                   
+                    ['/book/springInAction','Spring in Action 4 读书笔记'],
                 ]
             },
             {
