@@ -19,4 +19,7 @@ tail -f xxx.log
 
 //最后20行日志
 tail -n 20 xxx.log
+
+//查看磁盘空间
+df -h
 ````
