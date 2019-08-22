@@ -67,6 +67,7 @@ module.exports = {
                     ['/collection/LinkedList','LinkedList 源码'],
                     ['/collection/HashMap','HashMap 源码'],
                     ['/collection/String','String 源码'],
+                    ['/collection/BigDecimal','BigDecimal 源码'],
                 ]
             },
             {
