@@ -68,6 +68,8 @@ module.exports = {
                     ['/collection/HashMap','HashMap 源码'],
                     ['/collection/String','String 源码'],
                     ['/collection/BigDecimal','BigDecimal 源码'],
+                    ['/collection/classloader','java 类的加载'],
+                    ['/collection/reflect','java 反射'],
                 ]
             },
             {
