@@ -41,27 +41,12 @@ module.exports = {
             }
         ],
         sidebar: [
-            {
-                title: 'VUE', // 侧边栏名称
-                collapsable: true, // 可折叠
-                children: [
-                ['/guide/', 'vue基础'],
-                ['/guide/vuerouter', 'vue router'],
-                ['/guide/vuex', 'Vuex'],
-                ['/guide/axios', 'Axios 跨域'],
-                ['/guide/vue/vue1', 'dialog 弹出框使用'],// 你的md文件地址,后一个为标题
-                ['/guide/vue/vue2', 'vue 动态刷新页面'],
-                ['/guide/vue/vue3', 'vue 封装分页组件'],
-                ['/guide/vue/vue4', 'vue 动态菜单'],
-                ['/guide/vue/byValue', 'vue 常用传值'],
-               
-                ]
-            },
+           
             {
                 title:'JAVA基础',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/collection/JDK8Lambda','JDK8 函数式编程'],
+                    ['/collection/','JDK8 函数式编程'],
                     ['/collection/time','JDK8 新特性之Date-Time'],
                     ['/collection/ServletSourceCode','Servlet 源码分析'],
                     ['/collection/ArrayList','ArrayList 源码'],
@@ -72,6 +57,16 @@ module.exports = {
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
                    
+                ]
+            },
+            {
+                title:'JAVA WEB',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/javaweb/servlet','Java Servlet'],
+                    ['/javaweb/权限设计','权限设计'],
+                    ['/javaweb/logback','logback日志的链路追踪'],
+                    
                 ]
             },
             {
@@ -89,6 +84,22 @@ module.exports = {
                     ['/book/springInAction','Spring in Action 4 读书笔记'],
                 ]
             },
+             {
+                title: 'VUE', // 侧边栏名称
+                collapsable: true, // 可折叠
+                children: [
+                ['/guide/base', 'vue基础'],
+                ['/guide/vuerouter', 'vue router'],
+                ['/guide/vuex', 'Vuex'],
+                ['/guide/axios', 'Axios 跨域'],
+                ['/guide/vue/vue1', 'dialog 弹出框使用'],// 你的md文件地址,后一个为标题
+                ['/guide/vue/vue2', 'vue 动态刷新页面'],
+                ['/guide/vue/vue3', 'vue 封装分页组件'],
+                ['/guide/vue/vue4', 'vue 动态菜单'],
+                ['/guide/vue/byValue', 'vue 常用传值'],
+               
+                ]
+            },
             {
                 title:'Nginx',
                 collapsable: true, // 可折叠
@@ -96,14 +107,7 @@ module.exports = {
                    
                 ]
             },
-            {
-                title:'JAVA WEB',
-                collapsable: true, // 可折叠
-                children:[
-                    ['/javaweb/权限设计','权限设计'],
-                    ['/javaweb/servlet','Java Servlet'],
-                ]
-            },
+            
             {
                 title:'MySQL',
                 collapsable: true, // 可折叠

@@ -45,7 +45,7 @@ LocalDateTime withDayOfMonth = localDateTime.withDayOfMonth(5);
 LocalDateTime withDayOfYear = localDateTime.withDayOfYear(120);
 
 /**
-* 计算两个日期时间的差值 （昨天直到明天 +2,反过来是 -2）
+* 计算两个日期时间的差值， （后面的 - 前面的 +2）
 * 同理还有年、月、日、时、分、秒的差值比较
 * LocalTime LocalDate都有此API,只是LocalTime不可计算年月日 ，LocalDate不可计算时分秒
 */
@@ -57,6 +57,15 @@ long untilDay = yesterday.until(tomorrow, ChronoUnit.DAYS);//2
 boolean before = yesterday.isBefore(tomorrow);//true
 //转时间戳，需要设置东八区 +8
 long timestamp = localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+/**
+* 用DateTimeFormatter，把LocalDateTime转成想要的日期格式字符串 (HH:mm:ss是24小时制)
+* LocalDate 也适用
+*/
+DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
+LocalDateTime time = LocalDateTime.now();
+String format = dateTimeFormatter.format(time);
+//把字符串转为LocalDate
+LocalDate localDate = LocalDate.parse("20180813",DateTimeFormatter.ofPattern("yyyyMMdd"));
 ````
 + `TemporalAdjuster`该类是一个计算用的类，提供了各种各样的计算方法。比如某个月的第一天，某个月的最后一天，某一年的第一天，某一年的第几天等各种计算方法。同样用`LocalDateTime`举例
 ````java
