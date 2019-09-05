@@ -78,6 +78,15 @@ module.exports = {
                 ]
             },
             {
+                title:'代码片段',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/mode/listener','listener 监听模式'],
+                    ['/mode/springbootRedis','spingboot 整合redis'],
+                
+                ]
+            },
+            {
                 title:'读书笔记',
                 collapsable: true, // 可折叠
                 children:[
