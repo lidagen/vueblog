@@ -87,6 +87,17 @@ module.exports = {
                 ]
             },
             {
+                title:'DATABASE',
+                collapsable: true, // 可折叠
+                children: [
+                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题   
+                    ['/mysql/lock', 'mysql 乐观锁与悲观锁'],
+                    ['/mysql/数据库分布式锁', '分布式锁1 数据库分布式锁'],
+                    ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
+                    ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
+                ]
+            },
+            {
                 title:'读书笔记',
                 collapsable: true, // 可折叠
                 children:[
@@ -114,14 +125,6 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                    
-                ]
-            },
-            
-            {
-                title:'MySQL',
-                collapsable: true, // 可折叠
-                children: [
-                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题   
                 ]
             },
             {
