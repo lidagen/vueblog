@@ -10,7 +10,7 @@
 + 解锁：解锁必须是解除自己加上的锁，比如一个A线程执行效率特别慢，导致锁失效后还未执行完，这时B线程拿到了锁，之后A线程执行完毕去解锁，结果把B线程的锁解了。导致后面的C、D、E都可以拿到锁。
 
 ### 实现过程
-+ 引入redis 并配置，实现参加代码片段里的springboot 整合 redis
++ 引入redis 并配置，实现参考**代码片段**里的 springboot整合redis
 
 + 和数据库分布式锁类似，当执行一个流程时，先加锁，如果成功则执行业务代码，完成后解锁.
 
@@ -238,3 +238,114 @@ public ModelAndView b() {
 + 上述代码，仅对 redis 单实例架构有效，当面对 redis 集群时就无效了。但是一般情况下，我们的 redis 架构多数会做成“主备”模式，然后再通过 redis 哨兵实现主从切换，这种模式下我们的应用服务器直接面向主机，也可看成是单实例，因此上述代码实现也有效。但是当在主机宕机，从机被升级为主机的一瞬间的时候，如果恰好在这一刻，由于 redis 主从复制的异步性，导致从机中数据没有即时同步，那么上述代码依然会无效，导致同一资源有可能会产生两把锁，违背了分布式锁的原则。
 
 + 当 redis 的架构是单实例模式时，如果存在主备且可以忍受小概率的锁出错，那么就可以直接使用上述代码，当然最严谨的方式还是使用官方的 Redlock 算法实现。其中 Java 包推荐使用 redisson。
+
+## redisson 改写redis分布式锁
+
+### jar包依赖
+````xml
+<dependency>
+    <groupId>org.redisson</groupId>
+    <artifactId>redisson</artifactId>
+    <version>3.5.0</version>
+</dependency>
+````
+
+### 配置Redisson
+````java
+public class RedissonManager {
+    private static Config config = new Config();
+    //声明redisso对象
+    private static Redisson redisson = null;
+   //实例化redisson
+    static{
+       /**
+         * 单机模式,如果有密码后面setPassword
+         */
+        config.useSingleServer().setAddress("redis://127.0.0.1:6379");
+        /**
+         * 哨兵模式
+         */
+        /*config.useSentinelServers().addSentinelAddress("redis://172.29.3.245:26378","redis://172.29.3.245:26379", "redis://172.29.3.245:26380")
+                .setMasterName("mymaster")
+                .setPassword("a123456").setDatabase(0);*/
+        /**
+         * 集群模式
+         */
+        /*config.useClusterServers().addNodeAddress(
+                "redis://172.29.3.245:6375","redis://172.29.3.245:6376", "redis://172.29.3.245:6377",
+                "redis://172.29.3.245:6378","redis://172.29.3.245:6379", "redis://172.29.3.245:6380")
+                .setPassword("a123456").setScanInterval(5000);*/
+       
+        //得到redisson对象
+        redisson = (Redisson) Redisson.create(config);
+    }
+
+ //获取redisson对象的方法
+    public static Redisson getRedisson(){
+        return redisson;
+    }
+}
+````
+### 锁的获取和释放
+````java
+public class DistributedRedisLock {
+    private static Logger LOG = LoggerFactory.getLogger(DistributedRedisLock.class);
+   //从配置类中获取redisson对象
+    private static Redisson redisson = RedissonManager.getRedisson();
+    private static final String LOCK_TITLE = "redisLock_";
+   //加锁
+    public static boolean acquire(String lockName,int timeout){
+        //声明key对象
+        String key = LOCK_TITLE + lockName;
+        //获取锁对象
+        RLock mylock = redisson.getLock(key);
+        //加锁，并且设置锁过期时间，防止死锁的产生
+       try {
+            return mylock.tryLock(time, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            LOG.error("======lock,e:{}======" + Thread.currentThread().getName(),e);
+            return Boolean.FALSE;
+        }
+    }
+  //锁的释放
+    public static void release(String lockName){
+        //必须是和加锁时的同一个key
+        String key = LOCK_TITLE + lockName;
+        //获取所对象
+        RLock mylock = redisson.getLock(key);
+        //释放锁（解锁）
+        mylock.unlock();
+        LOG.info("======unlock======"+Thread.currentThread().getName());
+    }
+}
+````
+
+### 改写 `RedisLockTemplateImpl`
+````java
+@Component
+public class RedisLockTemplateImpl implements RedisLockTemplate {
+
+    private static Logger LOG = LoggerFactory.getLogger(RedisLockTemplateImpl.class);
+
+    @Autowired
+    RedisLock redisLock;
+
+    @Override
+    public <T> T execute(RedisLockBean redisLockBean, CallBack<T> callBack) {
+         boolean acquire = false;
+        try {
+            acquire = DistributedRedisLock.acquire(redisLockBean.getName(), redisLockBean.getTimeout());
+            if (acquire){
+                LOG.info("RedisLockTemplate,获取到锁");
+                return callBack.invoke();
+            }
+            LOG.error("RedisLockTemplate,未获取到锁");
+            throw new AppException(CoreErrorCode.ONE_BY_ONE_EXCEPTION, oneByOne.getDescription() + "业务正在处理中");
+        } finally {
+            if(acquire){
+                DistributedRedisLock.release(redisLockBean.getName());
+            }  
+        }
+    }
+}
+````

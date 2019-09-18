@@ -90,18 +90,22 @@ module.exports = {
                 title:'DATABASE',
                 collapsable: true, // 可折叠
                 children: [
-                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题   
-                    ['/mysql/lock', 'mysql 乐观锁与悲观锁'],
+                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题  
+                    ['/mysql/mysqlLock', 'MySQL 表锁、行锁'], 
+                    ['/mysql/transcation', 'MySQL ACID与transcation'], 
+                    ['/mysql/mvcc', 'MySQL MVCC机制'], 
+                    ['/mysql/lock', 'Mysql 乐观锁与悲观锁'],
                     ['/mysql/数据库分布式锁', '分布式锁1 数据库分布式锁'],
                     ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
                     ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
                 ]
             },
             {
-                title:'读书笔记',
+                title:'杂',
                 collapsable: true, // 可折叠
                 children:[
                     ['/book/springInAction','Spring in Action 4 读书笔记'],
+                    ['/book/heapStackMethod','堆、栈、方法区'],
                 ]
             },
              {
@@ -121,7 +125,7 @@ module.exports = {
                 ]
             },
             {
-                title:'Nginx',
+                title:'REDIS',
                 collapsable: true, // 可折叠
                 children:[
                    

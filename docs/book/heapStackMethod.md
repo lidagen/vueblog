@@ -1,0 +1,1 @@
+## 堆 heap、栈 stack、方法区 method
