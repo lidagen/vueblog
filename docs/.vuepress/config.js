@@ -90,7 +90,6 @@ module.exports = {
                 title:'DATABASE',
                 collapsable: true, // 可折叠
                 children: [
-                    ['/knowledge/高性能MYSQL', '高性能mysql'],// 你的md文件地址,后一个为标题  
                     ['/mysql/mysqlLock', 'MySQL 表锁、行锁'], 
                     ['/mysql/transcation', 'MySQL ACID与transcation'], 
                     ['/mysql/mvcc', 'MySQL MVCC机制'], 
@@ -104,8 +103,10 @@ module.exports = {
                 title:'杂',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/book/springInAction','Spring in Action 4 读书笔记'],
+                    ['/book/springInAction','《Spring in Action 4》 读书笔记'],
                     ['/book/heapStackMethod','堆、栈、方法区'],
+                    ['/knowledge/高性能MYSQL', '《高性能mysql》 读书笔记'],
+                    ['/knowledge/MySQL与InnoDB', '《MYSQL内幕技术与InnoDB存储引擎》 读书笔记'],
                 ]
             },
              {
