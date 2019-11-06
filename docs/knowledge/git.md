@@ -14,6 +14,29 @@ git reset --hard <版本号> 回退回到某个未来版本
 git reflog 查看命令历史
 git checkout  --<fileName> 丢弃工作去修改
 git rm <fileName> 删除文件(还需要commit)
+
+git reset --soft HEAD^ 撤销上一次commit
+git reset --soft HEAD~2 撤销上2次commit
+
+已经push的代码
+reset current branch
+git push --force
+
+reset几个参数：
+
+--mixed 
+意思是：不删除工作空间改动代码，撤销commit，并且撤销git add . 操作
+这个为默认参数,git reset --mixed HEAD^ 和 git reset HEAD^ 效果是一样的。
+
+--soft
+不删除工作空间改动代码，撤销commit，不撤销git add . 
+
+--hard
+删除工作空间改动代码，撤销commit，撤销git add . 
+注意完成这个操作后，就恢复到了上一次的commit状态
+
+顺便说一下，如果commit注释写错了，只是想改一下注释，只需要：
+git commit --amend
 ````
 
 #### 创建分支和合并分支
@@ -40,6 +63,24 @@ git merge <需要合并的分支名> 合并分支到当前分支 Fast Forword模
 3.合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，
   而fast forward合并就看不出来曾经做过合并。
 ````
+
+#### GIT开发错分支处理
+1.代码改了还没提交
+
+git add .      (把所有改动暂存)
+git stash      (把暂存的文件提交到git的暂存栈)
+git checkout 本该提交代码的分支 
+git stash pop (将暂存栈中的代码放出来)
+
+2.代码改了还提交了
+
+git  checkout 不该提交代码提交了代码的分支
+git reset HEAD~1  （最近一次提交放回暂存区, 并取消此次提交）
+git stash                   (把暂存的文件提交到git的暂存栈)
+git checkout 该提交代码的分支
+git stash pop
+等你把代码提交到了正确的分支后，再次切到刚刚错的分支
+git push origin 错误的分支 -f  (把不该上去的文件回退掉)
 
 #### bug分支
 ````

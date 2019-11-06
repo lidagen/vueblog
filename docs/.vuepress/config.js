@@ -83,6 +83,7 @@ module.exports = {
                 children:[
                     ['/mode/listener','listener 监听模式'],
                     ['/mode/springbootRedis','spingboot 整合redis'],
+                    ['/mode/xss','XSS过滤'],
                 
                 ]
             },
