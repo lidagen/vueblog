@@ -90,7 +90,8 @@ module.exports = {
             {
                 title:'DATABASE',
                 collapsable: true, // 可折叠
-                children: [
+                children: [ 
+                    ['/mysql/mysqlIndex', 'MySQL 索引'], 
                     ['/mysql/mysqlLock', 'MySQL 表锁、行锁'], 
                     ['/mysql/transcation', 'MySQL ACID与transcation'], 
                     ['/mysql/mvcc', 'MySQL MVCC机制'], 
@@ -98,6 +99,7 @@ module.exports = {
                     ['/mysql/数据库分布式锁', '分布式锁1 数据库分布式锁'],
                     ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
                     ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
+                    ['/mysql/explain', 'MySQL EXPLAIN详解'], 
                 ]
             },
             {
