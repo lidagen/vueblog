@@ -72,6 +72,32 @@ MyISAM的索引方式是“非聚集”的，这么称呼是为了和InnoDB的�
 ### 索引使用策略以及优化
 MySQL优化主要分为`结构优化`和`查询优化`。本次主要讨论的高性能索引策略属于结构优化范畴。
 
+#### 索引类型
+
++ PRIMARY KEY（主键索引） 
+````sql
+ALTER TABLE table_name ADD PRIMARY KEY ( column )
+````
+
++ UNIQUE(唯一索引)  
+````sql
+ALTER TABLE table_name ADD UNIQUE (column)
+````
+
++ INDEX(普通索引) 
+````sql
+ALTER TABLE table_name ADD INDEX index_name ( column )
+````
+
++ FULLTEXT(全文索引) 
+````sql
+ALTER TABLE table_name ADD FULLTEXT ( column )
+````
++ 多列索引 
+````sql
+ALTER TABLE table_name ADD INDEX index_name ( column1, column2, column3 )
+````
+
 #### 联合索引概念
 在上文中，我们都是假设索引只引用了单个的列，实际上，MySQL中的索引可以以一定顺序引用多个列，这种索引叫做联合索引，单列索引可以看成联合索引元素数为1的特例。
 
@@ -79,14 +105,25 @@ MySQL优化主要分为`结构优化`和`查询优化`。本次主要讨论的�
 ````sql
 DROP TABLE IF EXISTS `emp`;
 CREATE TABLE `emp` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `first_name` varchar(16) DEFAULT NULL,
   `last_name` varchar(16) DEFAULT NULL,
-  `age` int(11) DEFAULT NULL,
-  `birthday` date DEFAULT NULL,
+  `age` int(11) NOT NULL,
+  `birthday` date NOT NULL,
   `remark` varchar(64) DEFAULT NULL,
-  UNIQUE KEY `UI_INDEX` (`id`,`age`,`birthday`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`,`age`,`birthday`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of emp
+-- ----------------------------
+INSERT INTO `emp` VALUES ('1', 'jim', 'green', '18', '2003-06-01', '吉姆');
+INSERT INTO `emp` VALUES ('2', 'li', 'lei', '17', '2004-12-03', '李雷');
+INSERT INTO `emp` VALUES ('4', 'eric', 'anido', '19', '2002-11-20', 'eric');
+INSERT INTO `emp` VALUES ('5', 'leBron', 'james', '35', '1983-12-03', '勒布朗');
+INSERT INTO `emp` VALUES ('6', 'kobe', 'bryant', '38', '1980-09-12', '科比');
+INSERT INTO `emp` VALUES ('7', 'allen', 'inversion', '40', '1979-08-13', '艾佛森');
+INSERT INTO `emp` VALUES ('8', 'li', 'james', '17', '2019-12-03', 'jackma');
 ````
 该表有一个联合索引<id,age,birthday>作为主键索引。
 
