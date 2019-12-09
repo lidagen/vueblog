@@ -103,6 +103,14 @@ module.exports = {
                 ]
             },
             {
+                title:'设计模式',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/design/decorator','装饰者模式'],
+                    ['/design/adapter','适配器模式'],
+                ]
+            },
+            {
                 title:'杂',
                 collapsable: true, // 可折叠
                 children:[
