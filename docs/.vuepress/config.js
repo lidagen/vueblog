@@ -106,6 +106,8 @@ module.exports = {
                 title:'设计模式',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/design/factory','工厂模式'],
+                    ['/design/singleton','单例模式'],
                     ['/design/decorator','装饰者模式'],
                     ['/design/adapter','适配器模式'],
                 ]
