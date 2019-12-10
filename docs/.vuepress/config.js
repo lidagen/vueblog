@@ -28,7 +28,6 @@ module.exports = {
                 {text:'babel es6转换es5',  link: '/knowledge/es6Trnsferes5'},
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
-               
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
@@ -70,24 +69,6 @@ module.exports = {
                 ]
             },
             {
-                title:'Spring',
-                collapsable: true, // 可折叠
-                children:[
-                    ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
-                
-                ]
-            },
-            {
-                title:'代码片段',
-                collapsable: true, // 可折叠
-                children:[
-                    ['/mode/listener','listener 监听模式'],
-                    ['/mode/springbootRedis','spingboot 整合redis'],
-                    ['/mode/xss','XSS过滤'],
-                
-                ]
-            },
-            {
                 title:'DATABASE',
                 collapsable: true, // 可折叠
                 children: [ 
@@ -100,6 +81,32 @@ module.exports = {
                     ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
                     ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
                     ['/mysql/explain', 'MySQL EXPLAIN详解'], 
+                ]
+            },
+            {
+                title:'Spring',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
+                
+                ]
+            },
+            {
+                title:'中间件',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/middleware/dubbo','服务治理Dubbo'],
+                
+                ]
+            },
+            {
+                title:'代码片段',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/mode/listener','listener 监听模式'],
+                    ['/mode/springbootRedis','spingboot 整合redis'],
+                    ['/mode/xss','XSS过滤'],
+                
                 ]
             },
             {
