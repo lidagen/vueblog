@@ -83,3 +83,302 @@
 + 完成后 `npm run dev`启动前端项目，访问  http://localhost:8081 进入Dubbo后台管理页面。
 
 到此阶段，Dubbo需要的环境以及依赖安装就已经完成了，可以后续进行项目开发。
+
+### springboot聚合项目
+考虑到生产和消费要依赖同一个service接口，创建一个springboot聚合项目，三个模块，一个provider模块，一个consumer模块，一个api模块。provider 和 consumer 都可以单独启动，且都依赖api接口，这样，两个项目都需要的接口可以放在api中。
+
+#### 创建项目
++ IDEA下新建一个springboot项目,删掉除了`pom.xml`外所有文件，打包模式为pom,modules内添加三个模块
+
+
+````xml
+<<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.5.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <modules>
+        <module>dubbo_provider</module>
+        <module>dubbo_consumer</module>
+        <module>dubbo_api</module>
+    </modules>
+
+    <groupId>com.dubbo</groupId>
+    <artifactId>dubbo_mode</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>dubbo_mode</name>
+    <packaging>pom</packaging>
+    <description>Spring Boot 聚合</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+````
++ 项目右键新增module,新建一个provider模块，改造改`pom.xml`,主要改造 parent依赖dubbo_mode模块，application.properties中改端口号8888.
++ 同理建造consumer,改端口号9999。
+````xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.dubbo</groupId>
+        <artifactId>dubbo_mode</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.dubbo</groupId>
+    <artifactId>dubbo_provider</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>dubbo_provider</name>
+    <packaging>jar</packaging>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dubbo</groupId>
+            <artifactId>dubbo_api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
+````
+
++ 新建api模块，由于api模块只负责提供公共的接口和类，所以建一个普通maven模块，parent选项选择null,
+````xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dubbo</groupId>
+    <artifactId>dubbo_api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    
+</project>
+`````
+
+这里多模块的聚合项目建造完成，consumer和provider模块引入api模块，测试能引入api中的类说明依赖成功。
+
+
+### 引入dubbo依赖以及配置
++ 主pom引入Apache dubbo,指定版本 2.7.1
+````java
+<!-- Dubbo Spring Boot Starter-->
+<dependency>
+    <groupId>org.apache.dubbo</groupId>
+    <artifactId>dubbo-spring-boot-starter</artifactId>
+    <version>${dubbo.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.dubbo</groupId>
+    <artifactId>dubbo</artifactId>
+    <version>${dubbo.version}</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<!-- Zookeeper dependencies -->
+<dependency>
+    <groupId>org.apache.dubbo</groupId>
+    <artifactId>dubbo-dependencies-zookeeper</artifactId>
+    <version>${dubbo.version}</version>
+    <type>pom</type>
+</dependency>
+<!-- Dubbo Spring Boot end-->
+````
++ api 增加一个接口（公共接口提供给provider 和 consumer 使用）
+````java
+public interface CostService {
+    /**
+     * 成本增加接口
+     * @param cost
+     * @return
+     */
+    Integer add(int cost);
+}
+````
+
+#### Provider 生产者
++ 生产者Provider `application.properties`配置
+````xml
+server.port=9999
+
+#生产者名称
+server.port=8888
+
+dubbo.application.name=dubbo-provider
+
+dubbo.registry.address=10.19.41.188:2181
+dubbo.registry.protocol=zookeeper
+dubbo.registry.check=false
+
+dubbo.protocol.name=dubbo
+dubbo.protocol.port=30003
+
+dubbo.monitor.protocol=register
+
+dubbo.consumer.check=false
+dubbo.consumer.timeout=3000
+````
+
++ 生产者启动类加`@EnableDubbo`
+````java
+@SpringBootApplication
+@EnableDubbo
+public class DubboProviderApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DubboProviderApplication.class, args);
+    }
+
+}
+````
+
++ 生产者provider实现这个api中定义的接口
+````java
+/**@Service注解import为dubbo的**/
+import org.apache.dubbo.config.annotation.Service;
+import com.dubbo.service.api.CostService;
+
+@Service
+public class CostServiceImpl implements CostService {
+    /**
+     * 假设之前总花费了100
+     */
+    private final Integer totalCost = 1000;
+
+    /**
+     * 之前总和 加上 最近一笔
+     * @param cost
+     * @return
+     */
+    @Override
+    public Integer add(int cost) {
+        return totalCost + cost;
+    }
+}
+````
+
+#### Consumer 消费者
+
++ 消费者Consumer `application.properties`配置
+````xml
+server.port=9999
+
+dubbo.application.name=dubbo-consumer
+#zookeper ip和端口
+dubbo.registry.address=10.19.41.188:2181
+dubbo.registry.protocol=zookeeper
+dubbo.registry.check=false
+
+dubbo.monitor.protocol=registry
+
+dubbo.consumer.check=false
+dubbo.consumer.timeout=3000
+````
+
++ 消费者service类中注入api中的接口
+````java
+import org.apache.dubbo.config.annotation.Reference;
+import com.dubbo.consumer.service.ProductService;
+import com.dubbo.service.api.CostService;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class ProductServiceImpl implements ProductService {
+    /**
+     * 使用dubbo的注解 org.apache.dubbo.config.annotation.Reference。进行远程调用service
+     */
+    @Reference
+    private CostService costService;
+
+    @Override
+    public Integer getCost(int a) {
+        return costService.add(a);
+    }
+}
+````
+
++ 启动入口加`@EnableDubbo`注解 
+
+#### 测试调用
+
++ 消费者Consumer中加一个Controller调用
+````java
+@RestController
+public class ProductController {
+    @Autowired
+    private ProductService productService;
+
+    /**
+     * 添加完 返回总共消费
+     * @param
+     * @return
+     */
+    @RequestMapping("/add")
+    public String getCost(int a){
+        return "该产品总共消费 ："+productService.getCost(a);
+    }
+}
+````
+
++ 先启动Provider 再启动 Consumer (必须按顺序启动`dubbo.consumer.check=false`这个设置不起作用？)
+
++ `http://localhost:8081/#/` 中服务查询可看服务注册成功 
+
++ 浏览器输入 `http://localhost:9999/add?a=22` 返回成功
+
+### 案例分享
++ github : `https://github.com/lidagen/dubboSoft.git`
+
++ 下载下来放D 盘dubboSoft包下（或者在zoo_sample.cfg指定路径）
+
++ 按顺序启动服务
