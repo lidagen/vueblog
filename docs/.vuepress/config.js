@@ -97,7 +97,7 @@ module.exports = {
                 children:[
                     ['/middleware/zookeeper','zookeeper'],
                     ['/middleware/dubbo','服务治理Dubbo'],
-                    ['/middleware/ElasticJob','分布式调度平台elasticJob'],
+                    ['/middleware/elasticJob','分布式调度平台elasticJob'],
                 
                 ]
             },
