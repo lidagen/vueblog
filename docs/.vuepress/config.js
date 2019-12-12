@@ -95,7 +95,9 @@ module.exports = {
                 title:'中间件',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/middleware/zookeeper','zookeeper'],
                     ['/middleware/dubbo','服务治理Dubbo'],
+                    ['/middleware/ElasticJob','分布式调度平台elasticJob'],
                 
                 ]
             },

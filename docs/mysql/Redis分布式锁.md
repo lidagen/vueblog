@@ -239,7 +239,10 @@ public ModelAndView b() {
 
 + 当 redis 的架构是单实例模式时，如果存在主备且可以忍受小概率的锁出错，那么就可以直接使用上述代码，当然最严谨的方式还是使用官方的 Redlock 算法实现。其中 Java 包推荐使用 redisson。
 
-## redisson 改写redis分布式锁
+## Redisson 改写redis分布式锁
++ Redisson是架设在Redis基础上的一个Java主内存数据网格（In-Memory Data Grid）。在Java实用工具包中常用接口的基础上，为使用者提供了一系列具有分布式特性的常用工具类。
++ Redisson Wiki：`https://github.com/redisson/redisson/wiki`
+
 
 ### jar包依赖
 ````xml
