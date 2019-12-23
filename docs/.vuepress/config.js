@@ -72,6 +72,7 @@ module.exports = {
                 title:'DATABASE',
                 collapsable: true, // 可折叠
                 children: [ 
+                    ['/mysql/explain', 'MySQL EXPLAIN详解'], 
                     ['/mysql/mysqlIndex', 'MySQL 索引'], 
                     ['/mysql/mysqlLock', 'MySQL 表锁、行锁'], 
                     ['/mysql/transcation', 'MySQL ACID与transcation'], 
@@ -80,7 +81,7 @@ module.exports = {
                     ['/mysql/数据库分布式锁', '分布式锁1 数据库分布式锁'],
                     ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
                     ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
-                    ['/mysql/explain', 'MySQL EXPLAIN详解'], 
+                    
                 ]
             },
             {
@@ -88,7 +89,6 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
-                
                 ]
             },
             {
@@ -115,10 +115,13 @@ module.exports = {
                 title:'设计模式',
                 collapsable: true, // 可折叠
                 children:[
+                   
                     ['/design/factory','工厂模式'],
                     ['/design/singleton','单例模式'],
                     ['/design/decorator','装饰者模式'],
                     ['/design/adapter','适配器模式'],
+                    ['/design/template','模板方法模式'],
+                  
                 ]
             },
             {
