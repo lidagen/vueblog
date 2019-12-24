@@ -201,3 +201,7 @@ public class MyDataflowJob implements DataflowJob<Person> {
 + 上面配置，一个简单的分布式调度平台就完成了，启动ZK，修改端口号，分别起两个服务A,B。
 + 从打印可以看出，分片策略的FirstJob,任务分成两部分分别在A,B上运行。
 + 分片策略为主从的SingleJob,只在一台运行，停掉执行SingleJob的A服务，主从的SingleJob转移到B执行，而分片的所有任务也都在B上执行。
+
+#### github demo 
+`git remote add origin https://github.com/lidagen/elastic-job.git
+git push -u origin master`

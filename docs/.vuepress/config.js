@@ -98,6 +98,8 @@ module.exports = {
                     ['/middleware/zookeeper','zookeeper'],
                     ['/middleware/dubbo','服务治理Dubbo'],
                     ['/middleware/elasticJob','分布式调度平台elasticJob'],
+                    ['/middleware/disconf','分布式配置管理平台disconf'],
+                    ['/middleware/kafka','消息中间件框架Kafka'],
                 
                 ]
             },
@@ -108,6 +110,7 @@ module.exports = {
                     ['/mode/listener','listener 监听模式'],
                     ['/mode/springbootRedis','spingboot 整合redis'],
                     ['/mode/xss','XSS过滤'],
+                    ['/mode/profile','profile的使用'],
                 
                 ]
             },
