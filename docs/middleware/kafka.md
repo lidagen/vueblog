@@ -32,7 +32,7 @@
 
 #### 生产方
 + `application.properties`中配置kafka
-````
+````properties
 server.port=8787
 
 #============== kafka ===================
@@ -103,7 +103,7 @@ public class KafkaController {
 #### 消费方
 
 + `application.properties`中配置kafka
-````
+````properties
 server.port=7878
 #=============== consumer  =======================
 spring.kafka.bootstrap-servers=127.0.0.1:9092

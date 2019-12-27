@@ -95,10 +95,10 @@ module.exports = {
                 title:'中间件',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/middleware/zookeeper','zookeeper'],
+                    ['/middleware/zookeeper','分布式协调服务器Zookeeper'],
                     ['/middleware/dubbo','服务治理Dubbo'],
-                    ['/middleware/elasticJob','分布式调度平台elasticJob'],
-                    ['/middleware/disconf','分布式配置管理平台disconf'],
+                    ['/middleware/elasticJob','分布式调度平台ElasticJob'],
+                    ['/middleware/apollo','分布式配置管理平台Apollo'],
                     ['/middleware/kafka','消息中间件框架Kafka'],
                 
                 ]
