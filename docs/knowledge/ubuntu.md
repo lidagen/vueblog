@@ -15,7 +15,7 @@ sudo apt-get update
 sudo apt-get upgrade
 ````
 
-#### 查看被占用的端口号以及中止
+#### 查看被占用的端口号以及终止
 ````sh
 # 根据端口号找到进程
 sudo losf -i:端口号
