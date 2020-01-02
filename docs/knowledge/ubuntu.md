@@ -1,5 +1,20 @@
 ## Ubuntu 下Linux 命令
 
++ **sudo**
+允许当前用户以root权限执行
+
++ **apt-get**
+Ubuntu从互联网仓库中搜索、安装、升级、卸载软件。（CentOS中用yum）
+
+#### 更新软件仓库源列表
+````sh
+sudo apt-get update
+````
+#### 更新本地已安装的软件
+````sh
+sudo apt-get upgrade
+````
+
 #### 查看被占用的端口号以及中止
 ````sh
 # 根据端口号找到进程
