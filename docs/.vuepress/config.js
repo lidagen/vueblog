@@ -101,7 +101,14 @@ module.exports = {
                     ['/middleware/elasticJob','分布式调度平台ElasticJob'],
                     ['/middleware/apollo','分布式配置管理平台Apollo'],
                     ['/middleware/kafka','消息中间件框架Kafka'],
-                
+                ]
+            },
+            {
+                title:"环境部署",
+                classloader:true,
+                children:[
+                    ['/build/docker','应用容器引擎Docker'],
+                    ['/build/nginx','负载均衡Nginx'],
                 ]
             },
             {
