@@ -36,3 +36,102 @@
 
 + 举个例子：小明写了一个系统，该系统的技术栈非常广，需要依赖于各种开源库和中间件。如果按照纯手动的部署方式，小明需要安装各种开源软件，还需要写好每个开源软件的配置文件。如果只是部署一次，这点时间开销还是可以接受的，但如果小明每隔几天就需要换个服务器去部署他的程序，那么这些繁琐的重复工作无疑是会令人发狂的。这时候，Docker的用处就派上场了，小明只需要根据应用程序的部署步骤编写一份Dockerfile文件（将安装、配置等操作交由Docker自动化处理），然后构建并发布他的镜像，这样，不管在什么机器上，小明都只需要拉取他需要的镜像，然后就可以直接部署运行了，这正是Docker的魅力所在。
 
+### docker安装
+
++ 根据自己的系统下载安装docker
+
++ 登陆 `https://cr.console.aliyun.com/`，按照操作文档配置阿里云镜像
+
+### docker命令
+````sh
+#拉取一个 docker 镜像,不指定版本默认最新:latest
+docker pull java
+
+# 拉取一个指定版本
+docker pull java:8
+
+# 查看镜像
+docker images
+
+# 查看哪些容器运行
+docker ps -a
+
+# 启动、重启、停止容器
+docker start container_name/container_id
+docker restart container_name/container_id
+docker stop container_name/container_id
+
+# 运行一个镜像，并对其指定端口映射(springboot_web的 8080端口映射为80)
+docker run -d -p 80:8080 springboot_web
+
+# 运行这个容器中的镜像的话，并且调用镜像里面的 bash
+docker run -t -i container_name/container_id /bin/bash
+
+# 如果我们需要删除某个镜像，需要先停止容器，然后删除容器，最后删除镜像
+docker ps
+docker stop container_name/container_id
+docker rm container_name/container_id
+docker rmi image_name
+
+````
+
++ 这里罗列是常用命令，更多命令参照:
+````sh
+docker --help
+````
+
+### Dockerfile
++ Dockerfile 简单来说是构建镜像内容的一组命令。通过Dockerfile我们可以自定义镜像，让其能够运行在容器中。
+
+**Dockerfile 包括：**
+
++ **基础镜像(父镜像)信息指令 FROM**
++ **维护者信息指令 MAINTAINER**
++ **镜像操作指令 RUN 、 EVN 、 ADD 和 WORKDIR 等**
++ **容器启动指令 CMD 、 ENTRYPOINT 和 USER 等**
+
+例子：
+````sh
+FROM java:8
+MAINTAINER jason<wal365@126.com>
+VOLUME /tmp
+ADD docker_hello_world-0.0.1-SNAPSHOT.jar app.jar
+RUN sh -c 'touch /app.jar'
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+````
+
+我们分析一下上面这个过程：
++ 从 Docker Hub 上 pull 下jdk 8 的基础镜像
++ 显示维护者的信息
++ 数据卷，容器中的进程操作的数据持久化都是保存在容器的可写层上。这里的 /tmp 目录就会在运行时自动挂载为匿名卷，即使容器删除了，数据还在。
++ 把 docker_hello_world-0.0.1-SNAPSHOT.jar改名为app.jar添加进镜像中
++ 指定 docker build 过程中运行的程序
++ 指定app.jar的参数（此处为空）
++ 类似 CMD 指令的功能，用于为容器指定默认运行程序，从而使得容器像是一个单独的可执行程序。
+
+:::tip
+具体参数参考文档
+:::
+
+#### 利用DockerFile构建一个web项目镜像
+
++ 新建一个web工程，端口为默认的8080，编辑controller，返回”hello docker!“,启动`localhost:8080/hi`访问能成功显示。
+
++ 停止项目，运行mvn package打包为spring-web.jar
+
++ 在jar包目录新建Dockerfile,并复制上面的构建过程，更改docker_hello_world-0.0.1-SNAPSHOT.jar为自己打包的jar名称
+
++ 运行 命令构建镜像
+````sh
+#-t 是为新镜像设置仓库和名称，其中 ws 为仓库名， docker_spring_web 为镜像名 ，注意后面的 .
+docker build -t ws/docker_spring_web .
+````
+
++ docker images 查看镜像
+
++ 启动，访问9999端口访问
+````sh
+#8080端口映射为9999
+docker run -d -p 9999:8080 ws/docker_spring_web
+````

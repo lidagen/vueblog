@@ -33,3 +33,11 @@ sudo chmod -R 777 /opt/software/zookeeper
 # 把xxx.tar.gz 解压到绝对目录/opt/software下
 sudo tar -zxvf  xxx.tar.gz -C  /opt/software
 ````
+
+### 修改文件
+````sh
+#编辑settings.xml文件
+sudo gedit /opt/software/maven/conf/settings.xml
+````
+
+
