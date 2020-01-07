@@ -43,6 +43,8 @@
 + 登陆 `https://cr.console.aliyun.com/`，按照操作文档配置阿里云镜像
 
 ### docker命令
+
+#### 镜像命令
 ````sh
 #拉取一个 docker 镜像,不指定版本默认最新:latest
 docker pull java
@@ -52,20 +54,60 @@ docker pull java:8
 
 # 查看镜像
 docker images
+````
+#### 容器命令
++ 启动容器
+
+````sh
+#启动容器
+docker run [OPTION]  IMAGE [COMMAND] [ARG...]
+# OPTION 说明
+<!--
+    --name 为容器起一个新名称
+    -d 后台启动容器，守护线程的方式，返回id
+    -i  交互式模式启动容器，通常与-t一起使用
+    -t  为容器重新分配一个伪输入终端
+    -P 随即端口启动
+    -p 指定端口映射，有以下四种格式：
+      ip:hostPort:containerPort
+      ip::containerPort
+      hostPort:containerPort
+      containerPort
+ -->
+# 运行一个镜像，并对其指定端口映射(springboot_web的 8080端口映射为80)
+docker run -d -p 80:8080 springboot_web
+# 运行这个容器中的镜像的话，并且调用镜像里面的 bash
+docker run -it container_name/container_id /bin/bash
+````
++ 退出容器
+
+````sh
+exit 停止容器
+ctrl+p+q 不停止容器退出容器终端
+````
+
++ 列出所以正在运行的容器
+````sh
 
 # 查看哪些容器运行
-docker ps -a
+docker ps  [OPTION]
+
+# OPTION说明
+<!--
+-a 正在运行和历史运行的容器
+-l  显示最近创建的容器
+-n 显示最近n个创建的容器
+-q  静默模式，只显示容器id
+--no-trunc 不截断输出 
+-->
+````
++ 启动容器、 重启、停止容器
+````sh
 
 # 启动、重启、停止容器
 docker start container_name/container_id
 docker restart container_name/container_id
 docker stop container_name/container_id
-
-# 运行一个镜像，并对其指定端口映射(springboot_web的 8080端口映射为80)
-docker run -d -p 80:8080 springboot_web
-
-# 运行这个容器中的镜像的话，并且调用镜像里面的 bash
-docker run -t -i container_name/container_id /bin/bash
 
 # 如果我们需要删除某个镜像，需要先停止容器，然后删除容器，最后删除镜像
 docker ps
@@ -73,12 +115,58 @@ docker stop container_name/container_id
 docker rm container_name/container_id
 docker rmi image_name
 
+# 强制停止容器
+docker kill container_name/container_id
+
+#删除多个容器
+docker rm -f  ${docker -a -q}
 ````
+
+#### 容器重要命令
+
++ 启动守护式容器
+````sh
+docker run -d container_name/container_id
+````
+
++ 查看容器日志
+````sh
+# -t 加入时间戳  -f不停的追加（动态） -tail linux命令 尾巴
+docker logs -f -t --tail container_id
+````
+
++ 查看容器运行的线程
+````sh
+docker top container_id
+````
+
++ 查看容器内部细节
+````sh
+docker inspect container_id
+````
+
++ 进入正在运行的容器并以命令交互
+````sh
+# 对容器进行bashShell操作，得到结果回到宿主机
+docker exec -t container_id bashShell 
+
+# 直接进入容器并启动终端
+docker attach container_id
+````
+
++ 从容器内拷贝数据到主机
+````sh
+docker cp container_id:容器内路径 目的主机路径
+````
+
 
 + 这里罗列是常用命令，更多命令参照:
 ````sh
 docker --help
 ````
+
+### 镜像原理
+
 
 ### Dockerfile
 + Dockerfile 简单来说是构建镜像内容的一组命令。通过Dockerfile我们可以自定义镜像，让其能够运行在容器中。
