@@ -40,4 +40,9 @@ sudo tar -zxvf  xxx.tar.gz -C  /opt/software
 sudo gedit /opt/software/maven/conf/settings.xml
 ````
 
+### 新建文件
+````sh
+sudo touch /opt/1.md
+````
+
 

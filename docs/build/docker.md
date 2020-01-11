@@ -119,7 +119,7 @@ docker rmi image_name
 docker kill container_name/container_id
 
 #删除多个容器
-docker rm -f  ${docker -a -q}
+docker rm $(docker ps -a -q)
 ````
 
 #### 容器重要命令
@@ -166,60 +166,311 @@ docker --help
 ````
 
 ### 镜像原理
++ 镜像就像一层层的嵌套，比如一个tomcat,它下面依赖jdk,jdk又依赖centos。层都是只读的，只有最上面一层是可写。
 
+### 容器数据卷
 
-### Dockerfile
-+ Dockerfile 简单来说是构建镜像内容的一组命令。通过Dockerfile我们可以自定义镜像，让其能够运行在容器中。
+**容器卷能干什么：**
++ 用来持久花容器中运行产生的数据。
 
-**Dockerfile 包括：**
++ 容器之间希望可以共享数据（一边修改另一边也改变）
 
-+ **基础镜像(父镜像)信息指令 FROM**
-+ **维护者信息指令 MAINTAINER**
-+ **镜像操作指令 RUN 、 EVN 、 ADD 和 WORKDIR 等**
-+ **容器启动指令 CMD 、 ENTRYPOINT 和 USER 等**
++ 容器和宿主机之间共享数据（一边修改另一边也改变）
 
-例子：
+**容器卷的特点：**
++ 数据卷可以在容器之间共享或者重用数据
+
++ 卷中的更改可以直接生效
+
++ 数据卷的更改不会包含在镜像的更新中
+
++ 数据卷的生命周期一直持续到没有容器使用它为止
+
+**容器中添加容器卷**
++ **直接命令添加**
 ````sh
-FROM java:8
-MAINTAINER jason<wal365@126.com>
-VOLUME /tmp
-ADD docker_hello_world-0.0.1-SNAPSHOT.jar app.jar
-RUN sh -c 'touch /app.jar'
-ENV JAVA_OPTS=""
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+docker run -it -v /宿主机绝对路径:/容器内目录    镜像名
+# centos 宿主机/media/ws/disk1/下生成myVolume，镜像中根目录生成volume目录
+docker run -it -v /media/ws/disk1/myVolume:/volume centos
+
+# 只允许宿主机单项写入，容器内只读
+docker run -it -v /media/ws/disk1/volume:/volume:ro centos
+
+#  tips 容器停止后，主机修改数据，容器重启仍然会同步
 ````
 
-我们分析一下上面这个过程：
-+ 从 Docker Hub 上 pull 下jdk 8 的基础镜像
-+ 显示维护者的信息
-+ 数据卷，容器中的进程操作的数据持久化都是保存在容器的可写层上。这里的 /tmp 目录就会在运行时自动挂载为匿名卷，即使容器删除了，数据还在。
-+ 把 docker_hello_world-0.0.1-SNAPSHOT.jar改名为app.jar添加进镜像中
-+ 指定 docker build 过程中运行的程序
-+ 指定app.jar的参数（此处为空）
-+ 类似 CMD 指令的功能，用于为容器指定默认运行程序，从而使得容器像是一个单独的可执行程序。
++ **Dockerfile添加**
+
++  Dockerfile 简单来说是构建镜像内容的一组命令。通过Dockerfile我们可以自定义镜像，让其能够运行在容器中。
++ 比喻：
+````sh
+Hello.java =====> Hello.class
+
+Docker images ======> Dockerfile
+````
++ 步骤
+  - 目录下新建Dockerfile
+    - Dockerfile新建VOLUME来个容器创建一个或多个容器卷
+  - File构建
+  ````sh
+  # mkdir一个mydocker文件夹
+  # touch一个Dockerfile
+  # vi 编辑以下内容:wq!
+  # 创建两个容器卷dataVolumeContainer1 dataVolumeContainer2
+  FROM centos
+  VOLUME ["/dataVolumeContainer1","/dataVolumeContainer2"]
+  CMD echo "finished,--------------success"
+  CMD /bin/bash
+
+  ````
+  - build后生成镜像
+````sh
+docker build -f /mydocker/Dockerfile -t ws/mycentos .
+````
+  - run容器
+  ````sh
+  docker run -it ws/centos /bin/bash
+  ````
+  - 如何跟宿主机关联？
+  ````sh
+  # 重开终端或者var/bin/docker/volumes中查找
+  docker inspect ws/centos
+  ````
+
+  ### DOCKERFILE
+
+#### Dockerfile是什么
+  + Dockerfile是用来构建docker镜像的构建文件，是由一系列命令和参数构成的脚本
+  
+  + 构建三步骤:
+    -  Dockerfile
+    -  docker build
+    -  docker run   
+
+
+#### Dockerfile的构建过程
+
+**Dockerfile内容的基础知识：**
++ 每条保留指令都必须大写，并且后面必须跟随至少一个参数
++ 指令从上到下顺序执行
++ #表示注释
++ 每条指令会创建一个新的镜像层，并对镜像进行提交
+
+**docker执行Dockerfile大致流程：**
++ docker从基础镜像运行一个容器
++ 执行一条指令对容器作出修改
++ 执行类似docker commit的命令提交一个新的镜像层
++ docker再基于刚提交的镜像运行一个新容器
++ 执行Dockerfile中的下一条指令直到所有执行执行完成
+
+
+#### Dockerfile的体系结构（保留字指令）
++ **FROM**
+  - 当前镜像是基于哪个镜像（scratch是最上层的镜像，类似java中的Object）
+
++ **MAINTAINER**
+  - 镜像维护者以及邮箱
+
++ **RUN**
+  - 构建时需要运行的命令
+
++ **EXPOSE**
+  - 对外暴露的端口
+
++ **WORKDIR**
+  - 指定在创建容器后，终端进入(-it)后默认的工作目录
+
++ **ENV**
+  - 用来在构建镜像过程中设置环境变量
+
++ **ADD**
+  - 将宿主机目录下的文件拷贝进镜像，且命令会自动处理URL和解压tar包 
+
++ **COPY**
+  -  类似ADD，拷贝文件到镜像，
+
++ **VOLUME**
+  - 数据容器卷，用来保存容器数据到宿主机 
+
++ **CMD**
+  - 指定一个容器运行时要执行的命令
+  - Dockerfile中可以有多个CMD命令，但只有最后一个生效，CMD会被docker run之后的参数替换
+
++ **ENTRYPOINT**
+  - 指定一个容器运行时要执行的命令
+  - ENTRYPOINT和CMD一样，都是在指定容器启动程序和参数
+
++ **ONBUILD**
+  - 当构建一个被继承的Dockerfile时运行命令，父镜像在被子镜像继承后，父镜像的ONBUILD会被触发
+
+
+#### 案例
+
++ **Base镜像scratch**
+  - docker hub中99%的镜像都是通过在base镜像中安装和配置需要的软件构建出来的
+
++ **自定义镜像mycentos**
+  - 假设我们下载的centos以及不满足使用的，我需要一个能运行vim的centos.
+  - 构建Dockerfile
+  ````sh
+  FROM centos
+  #定义/tmp别名mypath
+  ENV mypath /tmp
+  #默认工作目录为mypath
+  WORKDIR $mypath
+  RUN yum -y install vim
+
+  #暴露的端口
+  EXPOSE 80
+  CMD /bin/bash
+  ````
+  - build
+  ````sh
+  docker build -f /media/ws/disk1/docker/mydocker/Dockerfile  -t vim/centos .
+
+  ````
+  - run
+  ````sh
+  docker run -it vim/centos /bin/bash
+  ````
+  - test
+  ````sh
+  # 可以看到直接进的是/tmp目录
+  #目录下 touch 1.md
+  # vim 进入测试vim安装是否成功
+  ````
+
++ **CMD/ENTRYPOINT镜像案例**
+  - 假设一个场景，我们做一个镜像，需要crul来获取`https://ip.cn/`中的ip信息。首先考虑CMD命令版本的
+  ````sh
+  FROM centos
+  #如果centos中没有curl安装一个
+  RUN yum install -y curl
+  #相当于命令 curl -s https://ip.cn
+  CMD ["curl","-s","https://ip.cn"]
+  ```
+- 
+  - 之后我们build（myip）镜像然后run（docker run -it myip)，成功返回ip
+  
+  - 这时我们需要链接返回更多的信息，比如链接的请求头，类似于命令 `curl -s -i https://ip.cn`返回报文头加ip，这时候在run上追加 -i
+  ````sh
+  docker run -it myip -i
+  ````
+  
+  - 这时候会报错，相当于后一个-i的CMD命令覆盖了Dockerfile中的CMD命令。这时候需要ENTRYPOINT命令。
+  ````sh
+  FROM centos
+  #如果centos中没有curl安装一个
+  RUN yum install -y curl
+  #相当于命令 curl -s https://ip.cn
+  ENTRYPOINT ["curl","-s","https://ip.cn"]
+  ````
+
+  - 之后重复上面步骤，完成！
 
 :::tip
-具体参数参考文档
++ CMD 和 ENTRYPOINT都是执行命令，不同点是ENTRYPOINT是追加，CMD是覆盖。类似StringBuilder和String
++ curl 命令参考文档
 :::
 
-#### 利用DockerFile构建一个web项目镜像
 
-+ 新建一个web工程，端口为默认的8080，编辑controller，返回”hello docker!“,启动`localhost:8080/hi`访问能成功显示。
 
-+ 停止项目，运行mvn package打包为spring-web.jar
++ **自定义镜像tomcat9**
+  - 准备工作：
+    + 选择一个路径mkdir一个mytomcat9文件夹
+    + 文件夹下准备jdk8和tomcat9的tar包
+    + touch一个cp.txt文件
+    + touch一个Dockerfile文件
+    ````sh
+    #vim进入Dockerfile
+    FROM centos
+    MAINTAINER gendali<wal365@126.com>
+    #copy宿主机的cp.txt到镜像为container.txt
+    COPY cp.txt /usr/local/container.txt
+    #把jdk和tomcat添加容器中
+    ADD jdk-8u221-linux-x64.tar.gz /usr/local/
+    ADD apache-tomcat-9.0.30.tar.gz /usr/local/
+    #安装VIM
+    RUN yum install -y vim
+    #设置登陆落脚点
+    ENV MYPATH /usr/local
+    WORKDIR $MYPATH
+    #配置jdk和tomcat环境变量
+    ENV JAVA_HOME /usr/local/jdk1.8.0_221
+    ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+    ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.30
+    ENV CATALIAN_BASE /usr/local/apache-tomcat-9.0.30
+    ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
+    #容器运行时的监听端口
+    EXPOSE 8080
+    #启动时运行tomcat
+    #ENTRYPOINT ["/usr/local/apache-tomcat-9.0.30/bin/startup.sh"]
+    #CMD ["/usr/local/apache-tomcat-9.0.30/bin/catanlina.sh","run"]
+    CMD /usr/local/apache-tomcat-9.0.30/bin/startup.sh && tail -F /usr/local/apache-tomcat-9.0.30/bin/logs/catalina.out
+    ````
+  + 用-v命令run 这个镜像，添加容器卷
+  ````sh
+  # 这个长命令分解来看，-p对外端口映射为8090，--name 名字叫mytom9 
+  # -v绑定两个数据卷到宿主机，方便部署项目和看日志
+  # --privileged=true 防止写权限不够
+  # mytomcat9是镜像名
+  docker run -d -p 8090:8080 --name mytom9 -v /media/ws/disk3/dockersoftware/tomcat9DataVolume:/usr/local/apache-tomcat-9.0.30/webapps/test -v /media/ws/disk3/dockersoftware/tocat9logs/:/usr/local/apache-tomcat-9.0.30/logs --privileged=true mytomcat9
+  ````   
+  + exec查看
+  ````sh
+  # docker ps查看id
+  # exec查看运行镜像bash
+  docker exec aa241d0d95e5 ls -l
+  #访问localhost:8090
+  ````
++  **在宿主机容器卷部署应用，同步到tomcat的webapps/test目录下**
+  - cd进入  tomcat9DataVolume目录 mkdir WEB-INF
+  - cd WEB-INF/
+  - touch web.xml
+  ````xml
+ <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    <display-name>test</display-name>
+  </web-app>
 
-+ 在jar包目录新建Dockerfile,并复制上面的构建过程，更改docker_hello_world-0.0.1-SNAPSHOT.jar为自己打包的jar名称
+  ````
+  - cd .. 之后touch 个a.jsp
+  ````jsp
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+          <title>mytomcat9 index</title>
+      </head>
+      <body>
+          <%="i am docker tomcat self"%>
+          <br>
+          <br>
+          <% System.out.println("===============docker start!");%>
+      </body>
+</html>
+  ````
 
-+ 运行 命令构建镜像
+  - 创建完成保存退出，查看运行的tomcat9容器中是否生成文件
+  ````sh
+  docker exec aa241d0d95e5 ls -l /usr/local/apache-tomcat-9.0.30/webapps/test
+  ````
+
+  - 访问jsp,`http://localhost:8090/test/a.jsp`
+  - 访问宿主机的/tocat9logs下sudo cat catalina.out 查看jsp中的===============docker start!打印
+
+### 推送镜像到ailiyun
+
+#### 创建镜像仓库
++ `https://cr.console.aliyun.com/cn-hangzhou/instances/repositories` 创建镜像仓库
++ 选择本地仓库
++ 点击管理，查看推送命令
 ````sh
-#-t 是为新镜像设置仓库和名称，其中 ws 为仓库名， docker_spring_web 为镜像名 ，注意后面的 .
-docker build -t ws/docker_spring_web .
-````
-
-+ docker images 查看镜像
-
-+ 启动，访问9999端口访问
-````sh
-#8080端口映射为9999
-docker run -d -p 9999:8080 ws/docker_spring_web
+sudo docker login --username=xxx@126.com registry.cn-hangzhou.aliyuncs.com
+sudo docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/gendali/mytomcat:[镜像版本号]
+sudo docker push registry.cn-hangzhou.aliyuncs.com/gendali/mytomcat:[镜像版本号]
 ````
