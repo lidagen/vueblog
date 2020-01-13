@@ -108,6 +108,7 @@ module.exports = {
                 classloader:true,
                 children:[
                     ['/build/docker','应用容器引擎Docker'],
+                    ['/build/dockerCompose','DockerCompose服务编排'],
                     ['/build/nginx','负载均衡Nginx'],
                 ]
             },
