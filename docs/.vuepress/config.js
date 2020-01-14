@@ -110,6 +110,7 @@ module.exports = {
                     ['/build/docker','应用容器引擎Docker'],
                     ['/build/dockerCompose','DockerCompose服务编排'],
                     ['/build/nginx','负载均衡Nginx'],
+                    ['/build/nginx1','Nginx的安装配置'],
                 ]
             },
             {
