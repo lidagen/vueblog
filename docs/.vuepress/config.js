@@ -90,6 +90,13 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
+                    ['/spring/springcloud1','SpringCloud之Eureka服务注册和发现'],
+                    ['/spring/springcloud2','SpringCloud之Ri bbon负载均衡'],
+                    ['/spring/springcloud3','SpringCloud之Feign 负载均衡'],
+                    ['/spring/springcloud4','SpringCloud之Hystrix断路器'],
+                    ['/spring/springcloud5','SpringCloud之Zuul路由网关'],
+                    ['/spring/springcloud6','SpringCloud分布式配置中心'],
+                    ['/spring/springcloudms','SpringCloud面试题'],
                 ]
             },
             {
