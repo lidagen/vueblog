@@ -45,4 +45,14 @@ sudo gedit /opt/software/maven/conf/settings.xml
 sudo touch /opt/1.md
 ````
 
+### 移动、拷贝、删除
+````sh
+#移动
+sudo mv /opt/1.png   media/ws/disk1
+#拷贝
+sudo cp /opt/1.png   media/ws/disk1
+# 删除(-rf 递归强制删除文件及其子目录)
+sudo rm -rf /opt/test
+````
+
 

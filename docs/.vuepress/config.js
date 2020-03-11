@@ -56,6 +56,7 @@ module.exports = {
                     ['/collection/BigDecimal','BigDecimal 源码'],
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
+                    ['/collection/CAS','CAS'],
                    
                 ]
             },
@@ -90,9 +91,9 @@ module.exports = {
                 collapsable: true, // 可折叠
                 children:[
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
-                    ['/spring/springcloud1','SpringCloud之Eureka服务注册和发现'],
-                    ['/spring/springcloud2','SpringCloud之Ri bbon负载均衡'],
-                    ['/spring/springcloud3','SpringCloud之Feign 负载均衡'],
+                    ['/spring/springcloud1','SpringCloud服务注册中心之Eureka'],
+                    ['/spring/springcloud2','SpringCloud服务注册中心之Zookeeper'],
+                    ['/spring/springcloud3','SpringCloud负载均衡之Ribbon'],
                     ['/spring/springcloud4','SpringCloud之Hystrix断路器'],
                     ['/spring/springcloud5','SpringCloud之Zuul路由网关'],
                     ['/spring/springcloud6','SpringCloud分布式配置中心'],

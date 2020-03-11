@@ -94,4 +94,7 @@
 数据流操作开发包 | SpringCloud Stream | 
 事件消息总线 | SpringCloud bus | 
 
++ 2020最新技术栈
+<img :src="$withBase('/springcloud/1.png')" alt="dock">
+
 ### eureka和zookeeper都可以提供注册与发现，说说它们的区别
