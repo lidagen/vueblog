@@ -96,7 +96,7 @@ module.exports = {
                     ['/spring/springcloud3','SpringCloud服务调用之Ribbon'],
                     ['/spring/springcloud4','SpringCloud服务调用之OpenFeign'],
                     ['/spring/springcloud5','SpringCloud服务降级之Hystrix'],
-                    ['/spring/springcloud6','SpringCloud分布式配置中心'],
+                    ['/spring/springcloud6','SpringCloud服务网关之GateWay'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                 ]
             },
