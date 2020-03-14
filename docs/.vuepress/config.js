@@ -90,14 +90,16 @@ module.exports = {
                 title:'Spring',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                     ['/spring/springcloud1','SpringCloud服务注册中心之Eureka'],
                     ['/spring/springcloud2','SpringCloud服务注册中心之Zookeeper'],
                     ['/spring/springcloud3','SpringCloud服务调用之Ribbon'],
                     ['/spring/springcloud4','SpringCloud服务调用之OpenFeign'],
                     ['/spring/springcloud5','SpringCloud服务降级之Hystrix'],
-                    ['/spring/springcloud6','SpringCloud服务网关之GateWay'],
+                    ['/spring/springcloud6','SpringCloud服务网关之Gateway'],
+                    ['/spring/springcloud7','SpringCloud Config分布式配置中心'],
+                    ['/spring/springcloud8','SpringCloud服务总线之Bus'],
                     ['/spring/springcloudms','SpringCloud面试题'],
+                    ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                 ]
             },
             {
