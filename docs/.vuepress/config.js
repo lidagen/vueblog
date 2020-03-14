@@ -95,7 +95,7 @@ module.exports = {
                     ['/spring/springcloud2','SpringCloud服务注册中心之Zookeeper'],
                     ['/spring/springcloud3','SpringCloud服务调用之Ribbon'],
                     ['/spring/springcloud4','SpringCloud服务调用之OpenFeign'],
-                    ['/spring/springcloud5','SpringCloud之Zuul路由网关'],
+                    ['/spring/springcloud5','SpringCloud服务降级之Hystrix'],
                     ['/spring/springcloud6','SpringCloud分布式配置中心'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                 ]
