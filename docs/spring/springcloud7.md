@@ -19,7 +19,8 @@
 ### SpringCloud Config的server构建
 
 #### github上新建一个项目，用来放置这些配置的数据
-
++ 地址为 https://github.com/lidagen/cloud-config.git
++ 新建两个yml ,分别为`application-dev.yml` `application-prd.yml`
 #### 新建一个端口3344的项目
 + pom.xml
 ````
@@ -86,16 +87,19 @@ spring:
     config:
       server:
         git:
-          uri: git@github.com:lidagen/cloud-config.git
+          uri: https://github.com/lidagen/cloud-config.git
+          ignoreLocalSshSettings: true #为了激活基于属性的SSH配置
           search-paths: ## 搜索目录
             - cloud-config
           default-label: master #读取分支
+       
 
 eureka:
   client:
     service-url:
       #设置与eureka交互的地址查询服务和注册服务需要依赖这个地址
       defaultZone: http://eureka7001:7001/eureka/,http://eureka7002:7002/eureka/
+
 
 ````
 
@@ -121,3 +125,6 @@ public class ConfigServerCenter3344 {
 }
 
 ````
+
++ 启动eureka和cofigserver ,如果报 `reject HostKey: github.com` ，请在github配置公钥
++ 浏览器输入 `http://localhost:3344/master/application-prd.yml` `http://localhost:3344/master/application-dev.yml`查看是否获取值
