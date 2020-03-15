@@ -98,6 +98,7 @@ module.exports = {
                     ['/spring/springcloud6','SpringCloud服务网关之Gateway'],
                     ['/spring/springcloud7','SpringCloud Config分布式配置中心'],
                     ['/spring/springcloud8','SpringCloud服务总线之Bus'],
+                    ['/spring/springcloud9','SpringCloud消息驱动之Stream'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                 ]
