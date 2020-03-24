@@ -55,4 +55,29 @@ sudo cp /opt/1.png   media/ws/disk1
 sudo rm -rf /opt/test
 ````
 
+### systemctl
+````sh
+#foobar表示伪变量
+#打开服务:
+sudo systemctl start foobar
+#关闭服务:
+sudo systemctl stop foobar
+#重启服务:
+sudo systemctl restart foobar
+#不中断正常功能下重新加载服务:
+sudo systemctl reload foobar
+#设置服务的开机自启动:
+sudo systemctl enable foobar
+#关闭服务的开机自启动:
+sudo systemctl disable foobar
+#查看活跃的单元:
+systemctl list-units
+#查看某个服务的状态:
+systemctl status foobar
+#查看已启动的服务列表：
+ systemctl list-unit-files|grep enabled
+#查看启动失败的服务列表：
+systemctl --failed
+````
+
 

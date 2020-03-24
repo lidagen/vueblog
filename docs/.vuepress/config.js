@@ -100,6 +100,7 @@ module.exports = {
                     ['/spring/springcloud8','SpringCloud服务总线之Bus'],
                     ['/spring/springcloud9','SpringCloud消息驱动之Stream'],
                     ['/spring/springcloud10','SpringCloud链路追踪之Sleuth'],
+                    ['/spring/springAlibaba1','SpringCloud Alibaba Nacos'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                 ]
