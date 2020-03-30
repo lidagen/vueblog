@@ -501,6 +501,11 @@ ps -ef|grep nacos|grep -v grep |wc -l
         }
  ````     
 
+ + nginx 启动
+````sh
+service nginx start
+````
+
 
 
 

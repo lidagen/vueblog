@@ -181,7 +181,15 @@ module.exports = {
                 title:'REDIS',
                 collapsable: true, // 可折叠
                 children:[
-                   
+                    ['/nosql/redis1', 'Redis基础 '],
+                    ['/nosql/redis2', 'Redis高级'],
+                ]
+            },
+            {
+                title:'JUC',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/juc/volatile', 'Valatile关键字'],
                 ]
             },
             {

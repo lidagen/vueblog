@@ -10,6 +10,10 @@ cat xxx.log | grep -C 5 '关键字'
 
 //全局搜索关键字
 find ./ ! -name "*[0-9]*" | xargs grep --color '关键字'
+//去除注释查看redis.conf 
+cat redis.conf | grep -v "#" |grep -v "^$"
+//去除注释并复制redis-6379.conf
+cat redis.conf | grep -v "#" |grep -v "^$" > redis-6329.conf
 ````
 
 + tail查看日志
