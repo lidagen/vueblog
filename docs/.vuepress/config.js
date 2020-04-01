@@ -183,6 +183,7 @@ module.exports = {
                 children:[
                     ['/nosql/redis1', 'Redis基础 '],
                     ['/nosql/redis2', 'Redis高级'],
+                    ['/nosql/redis3', 'Redis应用'],
                 ]
             },
             {
