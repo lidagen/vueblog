@@ -30,7 +30,7 @@
  | master |  slave |   
 - | :-: | :-: | :-: | -:
  || 1.发送指令：slaveof ip port | 
- | 2.接受指令，相应对方 |  | 
+ | 2.接受指令，响应对方 |  | 
  |  | 3.保存master ip port
  |  | 4.根据保存的信息创立socket
  |  | 5.周期性的发送ping
@@ -194,5 +194,153 @@ repl-ping-salve-period
 
 
 ### 哨兵模式
+#### 1.哨兵简介
++ 哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当master出现故障时重新选择新的master并将所有slave连接到新的master
+
++ 哨兵的作用
+  - 监控：不断的检查master、slave是否正常运行，master存活检测,master、slave运行情况检测
+  - 通知： 当被检测的服务出现问题时，向其他（哨兵间、客户端）发送通知
+  - 自动故障转移：断开master与slave之间连接，选取一个slave作为master,将其他slave转移到新master,并告知客户端新的master地址
+
++ 注意：
+  - 哨兵也是一台redis服务器，只是不提供数据服务
+  - 通常哨兵配置为单数
+
+#### 2.启用哨兵模式
+##### 2.1哨兵模式搭建
++ 演示搭建，我们会起3个哨兵，一个master两个slave
++ redis安装目录有一个`sentinel.conf`是哨兵配置，我们去注释复制修改它`cat sentinel.conf |grep -v "#" |grep -v "^$" > ./conf/sentinel_26379.conf`,修改dir指向自己设定的目录
+`````sh
+port 26379
+daemonize no
+pidfile /var/run/redis-sentinel.pid
+logfile ""
+dir /media/ws/disk3/redisData
+# 监控的ip 端口，2代表有两个哨兵判定那么就认定它挂了
+sentinel monitor mymaster 127.0.0.1 6379 2
+#sentinel会向master发送心跳PING来确认master是否存活，
+#如果master在“一定时间范围”内不回应PONG 或者是回复了一个错误消息，
+#那么这个sentinel会主观地(单方面地)认为这个master已经不可用
+sentinel down-after-milliseconds mymaster 30000
+#在发生failover主备切换时，这个选项指定了最多可以有多少个slave同时对
+#新的master进行同步，这个数字越小，完成failover所需的时间就越长，
+#但是如果这个数字越大，就意味着越多的slave因为replication而不可用。
+#可以通过将这个值设为 1 来保证每次只有一个slave处于不能处理命令请求的状态。
+sentinel parallel-syncs mymaster 1
+#主从切换时间
+sentinel failover-timeout mymaster 180000
+sentinel deny-scripts-reconfig yes
+`````
++ 再复制两个，修改端口号`sed 's/26379/26380/g' sentinel_26379.conf > sentinel_26380.conf `
++ 准备一个master,两个slave的配置文件
+````sh
+#master
+port 6379
+daemonize yes
+logfile "6379.log"
+dir "/media/ws/disk3/redisData"
+dbfilename dump_6379.rdb
+rdbcompression yes
+rdbchecksum yes
+save 10 2
+appendonly yes
+appendfsync everysec
+appendfilename appendonly_6379.aof
+auto-aof-rewrite-percentage 100 
+auto-aof-rewrite-min-size 64mb
+````
+````sh
+#slave
+port 6380
+daemonize yes
+logfile "6380.log"
+dir "/media/ws/disk3/redisData"
+slaveof 127.0.0.1 6379
+````
+
++ 启动顺序，先master,然后slave,最后三个哨兵
+````sh
+#启动主从
+redis-server  /conf/redis _xxxx.conf
+#启动哨兵
+redis-sentinel /conf/sentinel_xxx.conf
+````
+
+
+#### 3.哨兵工作原理
++ 哨兵在进行主从切换过程经历三个阶段
+  - 监控：同步信息
+  - 通知：保持联通
+  - 故障转移：
+    + 发现问题
+    + 竞选负责人
+    + 优选新master
+    + 新master上任，其它slave切换新master,原master作为slave故障恢复后重连
+
 
 ### 集群
+#### 1.集群简介
++ 现状问题：
+    + redis的OPS最大达到10w/s,当前业务量OPS已经达到20w/s
+    + 内存单机256G，业务需求内存时1T
++ 集群架构：集群就是使用网络将若干台计算机联通起来，并统一管理，使其对外呈现单机服务效果
++ 集群作用：
+  - 分散单台服务器的访问压力，实现负载均衡
+  - 分散单台服务器的存储压力，实现可扩展
+  - 降低单机宕机带来的业务灾难    
+
+#### 2.Redis集群结构设计
+##### 2.1数据存储设计
++ redis会对集群机器进行一个16384的等分（槽）。通过算法设计，对key进行计算取值之后对16384取余，得到的值来确定在redis集群中，处于哪台机器中
++ 如果增加机器，redis会对原来集群进行计算优化，把原来每台机器的槽分一部分给新机器。如果减少机器，则把这台机器槽分给其他几台机器上。
+
+##### 2.2相互之间通信设计
++ 各个数据库互相通信，保存各个库中槽的编号数据
++ 根据对key的算法计算，找数据在集群中哪个机器上，如果命中就返回，未命中则根据机器内保存的槽编号数据找到对应的机器
+
+#### 3.cluster集群结构搭建
++ 我们配一个三主三从的结构，启动6个redis服务
++ 新建配置文件
+````sh
+port 6379
+daemonize no
+logfile "6379.log"
+dir "/media/ws/disk3/redisData"
+dbfilename "dump_6379.rdb"
+rdbcompression yes
+rdbchecksum yes
+save 10 2
+appendonly yes
+appendfsync everysec
+appendfilename "appendonly_6379.aof"
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+bind 127.0.0.1
+databases 16
+#集群部署
+cluster-enabled yes
+#配置文件
+cluster-config-file nodes-6379.conf
+#超时时间10秒
+cluster-node-timeout 10000
+````
+
++ `sed 's/6379/6380/g' redis-cluster-6379.conf > redis-cluster-6380.conf` 复制5份
+
++ 启动服务 `redis-server redis-cluster-6379.conf`,启动6个服务
+
++ 执行集群指令
+````sh
+#进入当前目录下启动集群 其中的1代表一个master一个slave,如果是2则是一个master两个slave
+# 5.0启动集群方式,后面的连续IP，前3个为master,后3个为slave,yes确定
+redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6382 127.0.0.1:6383 127.0.0.1:6384 --cluster-replicas 1
+````
++ 操作cli
+````sh
+#-c为集群参数，会自动找对应的redis
+redis-cli -c
+````
+
++ 主从下线和主从切换
+  - slave掉线：slave掉线对功能不影响，重连上线后继续提供服务
+  - master掉线：掉线后选举slave当master,如果master后续上限则成为slave提供服务
