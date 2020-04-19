@@ -178,13 +178,23 @@ module.exports = {
                 ]
             },
             {
-                title:'REDIS',
+                title:'NoSQL',
                 collapsable: true, // 可折叠
                 children:[
                     ['/nosql/redis1', 'Redis基础 '],
                     ['/nosql/redis2', 'Redis高级'],
                     ['/nosql/redis3', 'Redis集群'],
                     ['/nosql/redis4', 'Redis应用'],
+                ]
+            },
+            {
+                title:'JVM',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/jvm/jvm1', 'jvm内存和垃圾回收 '],
+                    ['/jvm/jvm2', '字节码与类的加载'],
+                    ['/jvm/jvm3', '性能监控与调优'],
+                    ['/jvm/jvm4', 'JVM问题集'],
                 ]
             },
             {

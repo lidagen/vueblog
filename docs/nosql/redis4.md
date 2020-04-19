@@ -143,3 +143,10 @@ redis-benchmark -c 100 -n 5000
 + redis cli
   - monitor
   - showlog
+````sh
+#命令 get 获取慢查询日志 len 获取慢查询条数 reset重置慢查询日志
+showlog [operator]
+ #相关配置
+ slowlog-log-slower-than 1000 #设置慢查询时间下限
+ slowlog-max-len 100 #设置慢查询命令对应日志显示长度
+````+
