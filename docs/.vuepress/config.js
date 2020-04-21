@@ -57,7 +57,7 @@ module.exports = {
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
                     ['/collection/CAS','CAS'],
-                   
+                    ['/knowledge/0421go','knowledge'],   
                 ]
             },
             {

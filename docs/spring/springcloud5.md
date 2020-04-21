@@ -53,8 +53,8 @@
 
 + 8001 fallback
   - 业务类增加配置 @HystrixCommand
-  ````java
-  @Service
+````java
+@Service
 public class PaymentHystrixServiceImpl implements PaymentHystrixService {
     @Override
     public String payment_OK(Integer id) {
@@ -155,7 +155,8 @@ public class OrderFeignHystrix80 {
 
 ````
 
-````service改动
++ service
+````java
 @Component
 @FeignClient(value =  "CLOUD-PAYMENT-HYSTRIX-SERVICE",fallback = FeignHystrixFallbackService.class) //增加fallback
 public interface OrderFeignHystrixService {
