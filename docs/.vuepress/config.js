@@ -78,12 +78,12 @@ module.exports = {
                     ['/mysql/mysqlIndex', 'MySQL 索引'], 
                     ['/mysql/mysqlLock', 'MySQL 表锁、行锁'], 
                     ['/mysql/transcation', 'MySQL ACID与transcation'], 
+                    ['/mysql/dis_transcation', '分布式事务'],
                     ['/mysql/mvcc', 'MySQL MVCC机制'], 
                     ['/mysql/lock', 'Mysql 乐观锁与悲观锁'],
                     ['/mysql/数据库分布式锁', '分布式锁1 数据库分布式锁'],
                     ['/mysql/Redis分布式锁', '分布式锁2 Redis分布式锁'],
                     ['/mysql/ZK分布式锁', '分布式锁3 ZK分布式锁'],
-                    
                 ]
             },
             {
@@ -185,6 +185,15 @@ module.exports = {
                     ['/nosql/redis2', 'Redis高级'],
                     ['/nosql/redis3', 'Redis集群'],
                     ['/nosql/redis4', 'Redis应用'],
+                ]
+            },
+            {
+                title:'MQ',
+                collapsable: true, // 可折叠
+                children:[
+                    ['/kafka/kafka1','Kafka基础'],
+                    ['/kafka/kafka2','Kafka高级'],
+                    ['/kafka/kafka3','Kafka应用'],
                 ]
             },
             {
