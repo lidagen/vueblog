@@ -152,13 +152,11 @@ module.exports = {
                 ]
             },
             {
-                title:'杂',
+                title:'读书笔记',
                 collapsable: true, // 可折叠
                 children:[
                     ['/book/springInAction','《Spring in Action 4》 读书笔记'],
-                    ['/book/heapStackMethod','堆、栈、方法区'],
                     ['/knowledge/高性能MYSQL', '《高性能mysql》 读书笔记'],
-                    ['/knowledge/MySQL与InnoDB', '《MYSQL内幕技术与InnoDB存储引擎》 读书笔记'],
                 ]
             },
              {
