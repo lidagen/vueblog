@@ -102,8 +102,10 @@ module.exports = {
                     ['/spring/springcloud10','SpringCloud链路追踪之Sleuth'],
                     ['/spring/springAlibaba1','SpringCloud Alibaba Nacos'],
                     ['/spring/springAlibaba2','SpringCloud Alibaba Sentinel'],
+                    ['/spring/springDataJpa','Spring-data-jpa入门'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
+                  
                 ]
             },
             {
