@@ -226,3 +226,129 @@ public List<User> getUsers(){
 ````java
 @Query(value="select  u from user u where name like ?1"， nativeQuery = true)
 ````  
+
+### QueryDSL 
++ 使用JPA对单表操作很灵活，复杂一点的SQL就处理不好，这时候用QueryDSL 来实现复杂SQL
++ QueryDSL仅仅是一个通用的查询框架，专注于通过 JavaAPI 构建类型安全的 Sql 查询，也可以说 QueryDSL 是基于各种 ORM 框架以及 Sql 之上的一个通用的查询框架，QueryDSL 的查询，类似于 SQL 查询
+
+#### 引入QueryDSL相关
++ 引入依赖
+````xml
+<!--query dsl-->
+<dependency>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-jpa</artifactId>
+    <version>4.2.2</version>
+</dependency>
+<dependency>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-apt</artifactId>
+    <version>4.2.2</version>
+    <scope>provided</scope>
+</dependency>
+<!--query dsl end-->
+````
++ 引入插件，用于生成查询实例
+````xml
+<!--该插件可以生成querysdl需要的查询对象，执行mvn compile即可-->
+<plugin>
+  <groupId>com.mysema.maven</groupId>
+  <artifactId>apt-maven-plugin</artifactId>
+  <version>1.1.3</version>
+  <executions>
+    <execution>
+      <goals>
+        <goal>process</goal>
+      </goals>
+      <configuration>
+        <outputDirectory>target/generated-sources/java</outputDirectory>
+        <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+````
+#### 单表演示
+````java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+class JpaProjectApplicationTests {
+    @Autowired
+    private EntityManager entityManager;
+    //查询工厂实体
+    private JPAQueryFactory queryFactory;
+
+    @PostConstruct
+    public void initFactory() {
+        queryFactory = new JPAQueryFactory(entityManager);
+    }
+    @Test
+    void contextLoads() {
+        User user = new User("ws","123");
+        QUser qUser = QUser.user;
+        // 定于获取条件
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        // 要查询的条件
+        if(!StringUtils.isEmpty(user.getUsername())){
+            // 放入要查询的条件信息
+            booleanBuilder.and(qUser.username.contains(user.getUsername()));
+        }
+        // 要查询的条件
+        if(!StringUtils.isEmpty(user.getPassword())){
+            booleanBuilder.and(qUser.password.contains(user.getPassword()));
+        }
+        List<User> fetch = queryFactory.select(qUser).from(qUser).where(booleanBuilder).orderBy(qUser.creatTime.desc()).fetch();
+        for (User fetch1 : fetch) {
+            System.out.println(fetch1.getId()+"+++++++++++++++++++++");
+        }
+    }
+}
+````
++ 单表只为了演示基本使用，单表查询JPA就可以解决，QueryDSL主要解决多表联查问题
+
+#### 多表关联
++ 三张表 user role user_role ,user_role是中间表
+````java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+class JpaProjectApplicationTests {
+    @Autowired
+    private EntityManager entityManager;
+    //查询工厂实体
+    private JPAQueryFactory queryFactory;
+
+    private int roleId = 1;
+    private int userId = 1;
+
+    @PostConstruct
+    public void initFactory() {
+        queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    @Test
+    void contextLoads() {
+        QUser qUser = QUser.user;
+        QRole qRole = QRole.role;
+        QUserRole qUserRole = QUserRole.userRole;
+
+        // 定于获取条件
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        // 要查询的条件
+        if (!StringUtils.isEmpty(roleId)) {
+            // 放入要查询的条件信息
+            booleanBuilder.and(qUserRole.roleId.eq(roleId));
+        }
+        // 要查询的条件
+        if (!StringUtils.isEmpty(userId)) {
+            // 放入要查询的条件信息
+            booleanBuilder.and(qUserRole.userId.eq(userId));
+        }
+        
+        QueryResults<UserRoleVo> queryResults = queryFactory.select(Projections.bean(UserRoleVo.class, qUser.username, qRole.roleName)).from(qUser, qUserRole, qRole).where(booleanBuilder).fetchResults();
+        queryResults.getResults().stream().forEach(r ->{
+            System.out.println(r.getUsername() + "++++++++++++"+r.getRoleName());
+        });
+
+    }
+}
+````
