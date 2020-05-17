@@ -117,6 +117,8 @@ module.exports = {
                     ['/middleware/elasticJob','分布式调度平台ElasticJob'],
                     ['/middleware/apollo','分布式配置管理平台Apollo'],
                     ['/middleware/kafka','消息中间件框架Kafka'],
+                    ['/middleware/elacticsearch','全文检索服务Elactic Search'],
+                    ['/middleware/kibana','可视化分析工具Kibana'],
                 ]
             },
             {
