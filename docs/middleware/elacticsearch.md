@@ -53,3 +53,100 @@
 + 复制：
   - 某个节点挂了，有一个故障转移很重要。为此目的，ES允许你创建分片的一份或多份拷贝，这些拷贝叫做复制分片，或者复制
   - 复制很重要，主要的原因有两个：1）在节点失败的情况下，提供了高可用 2）拓展搜索量/吞吐量  
+
+### 安装ES
++ `elasticsearch.org`下载对应系统的安装包，进入bin目录执行elasticsearch.bat (windows) 
++ `http://localhost:9200/`访问是否启动
+
+### 文档管理(CRUD)
+#### 创建索引 
++ 在ElasticSearch索引中，对应于CRUD中的“创建”和“更新” - 如果对具有给定类型的文档进行索引，并且要插入原先不存在的ID。 如果具有相同类型和ID的文档已存在，则会被覆盖。
+````sh
+#创建一个json数据，REST API创建一个POST请求
+#格式为 http://localhost:9200/<index>/<type>
+
+curl -XPOST "http://localhost:9200/movies/1" -d'
+{
+  "title":"双旗镇刀客",
+	"country":"中国",
+	"actor":["高伟","赵玛娜","孙海英"],
+	"date":1991
+}'
+````
+
+#### 更新索引
++ 现在，在索引中有了一部电影信息，接下来来了解如何更新它，添加一个类型列表。要做到这一点，只需使用相同的ID索引它。使用与之前完全相同的索引请求，但类型扩展了JSON对象。
+````sh
+# 对增加的数据，增加一位演员王刚(id可以查询索引获得)
+# 格式为  http://localhost:9200/<index>/<type>/id
+curl -XPOST "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d'
+{
+  "title":"双旗镇刀客",
+	"country":"中国",
+	"actor":["高伟","赵玛娜","孙海英","王刚"],
+	"date":1991
+}'
+````
+
+#### 删除文档
++ 通过ID从索引中删除单个指定的文档，使用与获取索引文档相同的URL，只是这里将HTTP方法更改为DELETE
+````sh
+# DELETE请求，http://localhost:9200/<index>/<type>/<id>
+curl -XDELETE "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d''
+````
+
+#### 查询索引
++ _search端点 ：我们使用_search端点，可选择使用索引和类型。也就是说，按照以下模式向URL发出请求：`<index>/<type>/_search`其中，index和type都是可选的。
++ 换句话说，为了搜索电影，可以对以下任一URL进行POST请求
+  - `http://localhost:9200/_search` - 搜索所有索引和所有类型。
+  - `http://localhost:9200/movies/_search` - 在电影索引中搜索所有类型
+  - `http://localhost:9200/movies/1/_search` - 在电影索引中显式搜索电影类型的文档。
++ 由id获取文档/索引
+````sh
+# GET请求，http://localhost:9200/<index>/<type>/<id>
+# 3c76u3IBYkxQ-7Tf2f5-为双旗镇刀客的id
+curl -XGET "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d''
+````  
+
+#### 搜索请求正文和ElasticSearch查询DSL
++ 如果只是发送一个请求到上面的URL，我们会得到所有的电影信息。为了创建更有用的搜索请求，还需要向请求正文中提供查询。 请求正文是一个JSON对象，除了其它属性以外，它还要包含一个名称为`query`的属性，这就可使用ElasticSearch的查询DSL。
+````sh
+{
+    "query": {
+        //Query DSL here
+    }
+}
+````
+##### 基本自由文本搜索
+````sh
+# 搜索title中包含“那山”关键字的电影
+curl -XPOST "http://localhost:9200/_search" -d'
+{
+    "query": {
+        "query_string": {
+            "query": "那山"
+        }
+    }
+}'
+````
+##### 指定搜索的字段
+````sh
+# 搜索country中包含“中国”关键字的电影
+curl -XPOST "http://localhost:9200/_search" -d'
+{
+    "query": {
+        "query_string": {
+            "query": "中国",
+            "fields": ["country"]
+        }
+    }
+}'
+````
+
+
+
+
+
+
+
+
