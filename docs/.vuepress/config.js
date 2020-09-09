@@ -152,6 +152,7 @@ module.exports = {
                     ['/design/decorator','装饰者模式'],
                     ['/design/adapter','适配器模式'],
                     ['/design/template','模板方法模式'],
+                    ['/design/observer','观察者模式'],
                   
                 ]
             },
