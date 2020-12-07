@@ -57,7 +57,8 @@ module.exports = {
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
                     ['/collection/CAS','CAS'],
-                    ['/knowledge/0421go','knowledge'],   
+                    ['/knowledge/0421go','knowledge'],  
+                    ['/collection/Propagation','事务的传播机制'], 
                 ]
             },
             {
@@ -105,6 +106,7 @@ module.exports = {
                     ['/spring/springDataJpa','Spring-data-jpa入门'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
+                    ['/spring/applicationContext','Spring容器启动流程'],
                   
                 ]
             },
@@ -197,6 +199,7 @@ module.exports = {
                     ['/kafka/kafka1','Kafka基础'],
                     ['/kafka/kafka2','Kafka高级'],
                     ['/kafka/kafka3','Kafka应用'],
+                    ['/rabbitmq/rabbit基础','rabbitMQ基础'],
                 ]
             },
             {
