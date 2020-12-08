@@ -57,8 +57,9 @@ module.exports = {
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
                     ['/collection/CAS','CAS'],
-                    ['/knowledge/0421go','knowledge'],  
+                    ['/collection/SynchronizedLock','Synchronized锁升级'],
                     ['/collection/Propagation','事务的传播机制'], 
+                    ['/knowledge/0421go','knowledge'],  
                 ]
             },
             {
