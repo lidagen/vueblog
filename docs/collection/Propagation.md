@@ -15,8 +15,7 @@
   - NEVER _以非事务方式执行操作，如果当前事务存在则抛出异常。
   - NESTED _如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与propagation_required类似的操作
 
-  :::tips
+  :::tip
   + 使用PROPAGATION_REQUIRES_NEW,需要使用JtaTransactionManager作为事务管理器。
-  + PROPAGATION_NOT_SUPPORTED,也需要使用JtaTransactionManager作为事务管理器
-  + 
+  + PROPAGATION_NOT_SUPPORTED,也需要使用JtaTransactionManager作为事务管理器 
   :::
