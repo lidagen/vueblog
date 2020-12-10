@@ -143,7 +143,7 @@ module.exports = {
                     ['/mode/springbootRedis','spingboot 整合redis'],
                     ['/mode/xss','XSS过滤'],
                     ['/mode/profile','profile的使用'],
-                    ['/mode/ConfigurationProperties','@ConfigurationProperties注解'],
+                    ['/mode/configurationProperties','ConfigurationProperties注解'],
                 
                 ]
             },
