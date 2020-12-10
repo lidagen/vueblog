@@ -89,7 +89,7 @@ module.exports = {
                 ]
             },
             {
-                title:'Spring',
+                title:'SpringCloud',
                 collapsable: true, // 可折叠
                 children:[
                     ['/spring/springcloud1','SpringCloud服务注册中心之Eureka'],
@@ -104,11 +104,18 @@ module.exports = {
                     ['/spring/springcloud10','SpringCloud链路追踪之Sleuth'],
                     ['/spring/springAlibaba1','SpringCloud Alibaba Nacos'],
                     ['/spring/springAlibaba2','SpringCloud Alibaba Sentinel'],
+                ]
+            },
+            {
+                title:'Spring',
+                collapsable: true, // 可折叠
+                children:[
                     ['/spring/springDataJpa','Spring-data-jpa入门'],
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                     ['/spring/applicationContext','Spring容器启动流程'],
                     ['/spring/springBootApplication','@SpringBootApplication注解内部实现与原理'],
+                    ['/spring/springInit','spring启动初始化初始化'],
                   
                 ]
             },
