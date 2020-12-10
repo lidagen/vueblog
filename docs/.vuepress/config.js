@@ -108,6 +108,7 @@ module.exports = {
                     ['/spring/springcloudms','SpringCloud面试题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
                     ['/spring/applicationContext','Spring容器启动流程'],
+                    ['/spring/springBootApplication','@SpringBootApplication注解内部实现与原理'],
                   
                 ]
             },
@@ -142,6 +143,7 @@ module.exports = {
                     ['/mode/springbootRedis','spingboot 整合redis'],
                     ['/mode/xss','XSS过滤'],
                     ['/mode/profile','profile的使用'],
+                    ['/mode/ConfigurationProperties','@ConfigurationProperties注解'],
                 
                 ]
             },
