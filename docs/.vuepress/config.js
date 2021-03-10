@@ -210,6 +210,8 @@ module.exports = {
                     ['/kafka/kafka2','Kafka高级'],
                     ['/kafka/kafka3','Kafka应用'],
                     ['/rabbitmq/rabbit基础','rabbitMQ基础'],
+                    ['/rabbitmq/rabbit高级','rabbitMQ高级'],
+                    ['/rabbitmq/rabbit集群','rabbitMQ集群'],
                 ]
             },
             {
