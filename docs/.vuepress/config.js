@@ -113,6 +113,7 @@ module.exports = {
                     ['/spring/springSource/springSummary','Spring概述'],
                     ['/spring/springSource/IOC','ioc'],
                     ['/spring/springSource/AOP','aop'],
+                    ['/spring/springSource/BeanDefinitionReader','BeanDefinitionReader'],
                 ]
             },
             {
