@@ -56,7 +56,6 @@ module.exports = {
                     ['/collection/BigDecimal','BigDecimal 源码'],
                     ['/collection/classloader','java 类的加载'],
                     ['/collection/reflect','Class 源码'],
-                    ['/collection/CAS','CAS'],
                     ['/collection/SynchronizedLock','Synchronized锁升级'],
                     ['/collection/Propagation','事务的传播机制'], 
                     ['/knowledge/0421go','knowledge'],  
@@ -238,7 +237,11 @@ module.exports = {
                 title:'JUC',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/juc/volatile', 'Valatile关键字'],
+                    ['/juc/volatile', 'volatile关键字'],
+                    ['/juc/CAS', 'CAS'],
+                    ['/juc/aba', 'ABA问题'],
+                   
+                   
                 ]
             },
             {
