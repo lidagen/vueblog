@@ -237,7 +237,9 @@ module.exports = {
                 title:'JUC',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/juc/juc', 'JUC总览'],
                     ['/juc/volatile', 'volatile关键字'],
+                    ['/juc/CAS', 'CAS'],
                     ['/juc/CAS', 'CAS'],
                     ['/juc/aba', 'ABA问题'],
                    
