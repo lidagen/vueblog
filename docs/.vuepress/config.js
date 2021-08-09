@@ -240,10 +240,11 @@ module.exports = {
                     ['/juc/juc', 'JUC总览'],
                     ['/juc/volatile', 'volatile关键字'],
                     ['/juc/CAS', 'CAS'],
-                    ['/juc/CAS', 'CAS'],
                     ['/juc/aba', 'ABA问题'],
-                   
-                   
+                    ['/juc/collections', 'collections包下线程安全的集合类'],
+                    ['/juc/lock', 'Lock 锁'],
+                    
+                     
                 ]
             },
             {
