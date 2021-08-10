@@ -243,6 +243,7 @@ module.exports = {
                     ['/juc/aba', 'ABA问题'],
                     ['/juc/collections', 'collections包下线程安全的集合类'],
                     ['/juc/lock', 'Lock 锁'],
+                    ['/juc/tool', 'JUC tools'],
                     
                      
                 ]
