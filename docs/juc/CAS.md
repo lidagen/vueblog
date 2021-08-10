@@ -26,6 +26,53 @@ public class CASDemo {
 
 #### 自旋锁
 + Unsafe + CAS原理 = 自旋
+````java
+package com.test;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class SpinLock {
+    //对象初始值null
+    AtomicReference<Thread> threadAtomicReference = new AtomicReference<>();
+
+    public void spinLock() {
+        Thread thread = Thread.currentThread();
+        System.out.println(thread.getName() + "\t come in");
+        while (!threadAtomicReference.compareAndSet(null, thread)) {
+            System.out.println(thread.getName() + "等待");
+        }
+    }
+
+    public void spinUnLock() {
+        Thread thread = Thread.currentThread();
+        System.out.println(thread.getName() + "\t invoked Unlock");
+        threadAtomicReference.compareAndSet(thread, null);
+    }
+
+    public static void main(String[] args) {
+        SpinLock spinLock = new SpinLock();
+        new Thread(() -> {
+            try {
+                spinLock.spinLock();
+                TimeUnit.MILLISECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                spinLock.spinUnLock();
+            }
+
+        }, "aa").start();
+
+        new Thread(() -> {
+            spinLock.spinLock();
+            spinLock.spinUnLock();
+        }, "bb").start();
+
+
+    }
+}
+````
 
 
 #### Unsafe类   
