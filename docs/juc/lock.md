@@ -99,3 +99,115 @@ public class LockDemo {
 ````
 + 上面代码加读锁的意义在于，在线程进来的时候，首先判断是否有线程获取了锁，是否有线程获取了锁的判断通过读写锁中通过32位int类型state可以获取，其中低16位表示读锁，高16表示写锁。
 - 不加读锁，如果有线程正在写入，读到的数据是不准确的
+
+### Lock与Synchronized 区别
++ 构成维度：Synchronized是关键字,属于JVM层面,底层通过Monitor对象完成的，wait/notify等方法也以来monitor，所有只有在Synchronized代码块中才能使用wait/notify等方法；Lock是JUC包下的具体类，是api层面的
++ 使用方法：Synchronized不需要手动释放锁；Lock需要加锁lock()释放锁unlock()
++ 等待是否可中断: Synchronized不可中断，除非运行完成或者抛异常；Lock可以设置超时tryLock(time,unit),LockInterruptibly()放代码块中，调用interrupt()方法可中断
++ 公平锁：Lock可设置公平锁，而Synchronized只能是非公平锁
++ 唤醒：Lock可绑定多个条件condition，来分组唤醒线程们或精确唤醒，不像Synchronized要么随机唤醒要么全部唤醒
+
++ 精确唤醒demo
+````java
+/**
+ * 多线程直接顺序调用 实现A->B->C三个线程启动，要求：
+ * A大于1次， B打印2次，C打印3次
+ * 依次类推 来10轮
+ */
+class ShareSource {
+    /**
+     * 设定线程
+     */
+    private String threadNum = "A"; 
+    Lock lock = new ReentrantLock();
+    Condition conditionA = lock.newCondition();
+    Condition conditionB = lock.newCondition();
+    Condition conditionC = lock.newCondition();
+
+    //判断
+    public void print5() {
+        lock.lock();
+        try {
+            //不是A线程
+            while (threadNum != "A") {
+                conditionA.await();
+            }
+            //干活
+            for (int i = 1; i <= 1; i++) {
+                System.out.println(Thread.currentThread().getName() + "==> 打印： " + i +"次");
+            }
+            threadNum = "B";
+            //通知
+            conditionB.signal();
+        } catch (InterruptedException e) {
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    //判断
+    public void print10() {
+        lock.lock();
+        try {
+            //不是A线程
+            while (threadNum != "B") {
+                conditionB.await();
+            }
+            //干活
+            for (int i = 1; i <= 2; i++) {
+                System.out.println(Thread.currentThread().getName() + "==> 打印： " + i +"次");
+            }
+            threadNum = "C";
+            //通知
+            conditionC.signal();
+        } catch (InterruptedException e) {
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    //判断
+    public void print15() {
+        lock.lock();
+        try {
+            //不是A线程
+            while (threadNum != "C") {
+                conditionC.await();
+            }
+            //干活
+            for (int i = 1; i <= 3; i++) {
+                System.out.println(Thread.currentThread().getName() + "==> 打印： " + i +"次");
+            }
+            threadNum = "A";
+            //通知
+            conditionA.signal();
+        } catch (InterruptedException e) {
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+public class LockConditionDemo {
+
+    public static void main(String[] args) {
+        ShareSource source = new ShareSource();
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                source.print5();
+            }
+        }, "AA").start();
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                source.print10();
+            }
+        }, "BB").start();
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                source.print15();
+            }
+        }, "CC").start();
+    }
+}
+````
+

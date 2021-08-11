@@ -2,7 +2,8 @@ module.exports = {
     title: 'GENDALI',
     description: '积跬步。',
     head: [
-        ['link', { rel: 'icon', href: `/favicon.ico` }]// 增加一个自定义的 favicon(网页标签的图标)
+        ['link', { rel: 'icon', href: `/favicon.ico` }],// 增加一个自定义的 favicon(网页标签的图标)
+        ['meta',{'http-equiv':'Content-Security-Policy',content:"upgrade-insecure-requests"}]
       ],
     base: '/lidagen.github.io/',
     plugins: [
@@ -244,8 +245,7 @@ module.exports = {
                     ['/juc/collections', 'collections包下线程安全的集合类'],
                     ['/juc/lock', 'Lock 锁'],
                     ['/juc/tool', 'JUC tools'],
-                    
-                     
+                    ['/juc/blockingQueue', 'BlockingQueue 阻塞队列'],
                 ]
             },
             {
