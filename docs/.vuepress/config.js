@@ -246,6 +246,7 @@ module.exports = {
                     ['/juc/lock', 'Lock 锁'],
                     ['/juc/tool', 'JUC tools'],
                     ['/juc/blockingQueue', 'BlockingQueue 阻塞队列'],
+                    ['/juc/executor', 'Executor 线程池'],
                 ]
             },
             {
