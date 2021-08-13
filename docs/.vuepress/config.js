@@ -244,9 +244,13 @@ module.exports = {
                     ['/juc/aba', 'ABA问题'],
                     ['/juc/collections', 'collections包下线程安全的集合类'],
                     ['/juc/lock', 'Lock 锁'],
+                    ['/juc/lockSupport', 'LockSupport'],
+                    ['/juc/AQS', 'AQS'],
+                    ['/juc/fork', 'Fork/Join分支框架'],
                     ['/juc/tool', 'JUC tools'],
                     ['/juc/blockingQueue', 'BlockingQueue 阻塞队列'],
                     ['/juc/executor', 'Executor 线程池'],
+                    ['/juc/deadLock', '死锁以及问题定位分析'],
                 ]
             },
             {
