@@ -228,10 +228,9 @@ module.exports = {
                 title:'JVM',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/jvm/jvm1', 'jvm内存和垃圾回收 '],
-                    ['/jvm/jvm2', '字节码与类的加载'],
-                    ['/jvm/jvm3', '性能监控与调优'],
-                    ['/jvm/jvm4', 'JVM问题集'],
+                    ['/jvm/jvm1', 'JVM体系架构概述 '],
+                    ['/jvm/jvm2', '堆体系结构概述'],
+                    ['/jvm/jvm3', '堆参数调优入门'],
                 ]
             },
             {
