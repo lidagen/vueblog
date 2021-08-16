@@ -230,7 +230,7 @@ module.exports = {
                 children:[
                     ['/jvm/jvm1', 'JVM体系架构概述 '],
                     ['/jvm/jvm2', '堆参数调整'],
-                    ['/jvm/jvm3', 'GC 算法'],
+                    ['/jvm/jvm3', 'GC 分代收集算法'],
                 ]
             },
             {

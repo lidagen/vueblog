@@ -1,4 +1,6 @@
 ## JVM体系架构概述
+
++ JVM内存结构
 <img :src="$withBase('/jvm/jvm.png')" alt="dock">
 
 ### 类加载器 ClassLoader
@@ -54,16 +56,16 @@
 + 堆内存空间结构
 <img :src="$withBase('/jvm/heap.png')" alt="dock">
 
-+ 逻辑上，堆内存分为`新生、老年、元空间（1.7之前叫永久区）`，在物理上之分为`新生、老年`两个区。 
-+ 新生区是类的诞生、成长、消亡的区域，一个类在这里产生，应用，最后被垃圾回收器回收，结束生命。新区分为两个区，`伊甸区Eden Space`和`Survivor Space`。所有类都是在伊甸区Eden Space被new出来的，幸存区有两个0区和1区。当Eden Space空间用完时，程序又要创建新的对象，JVM的垃圾回收器会对Eden Space进行依次Young GC（会清空Eden区）,将不在被其它对象引用的对象进行销毁，然后再将剩余的对象移放进Survivor 0 Space。若Survivor 0 Space也满了，则再次进行YGC，剩余的存活者放入Survivor 1 Space。若Survivor 1 Space满了，继续YGC放回Survivor 0 Space。达到一定次数后（JVM参数MaxTenuringThreshold设置，默认15），还存活的对象，就会放入老年代。老年代满了以后会进行Full GC(重量级GC)进行内存清理，若老年代FGC还是无法满足对新对象的存储,就会产生OOM异常（OutOfMemoryError）。
++ 逻辑上，堆内存分为`新生、老年、元空间MetaSpace（1.7之前叫永久区Perm Gen）`，在物理上之分为`新生、老年`两个区。 
++ 新生区是类的诞生、成长、消亡的区域，一个类在这里产生，应用，最后被垃圾回收器回收，结束生命。新区分为两个区，`伊甸区Eden Space`和`Survivor Space`。所有类都是在伊甸区Eden Space被new出来的，幸存区有两个0区和1区。当Eden Space空间用完时，程序又要创建新的对象，JVM的垃圾回收器会对Eden Space进行依次Minor GC（会清空Eden区）,将不在被其它对象引用的对象进行销毁，然后再将剩余的对象移放进Survivor 0 Space。若Survivor 0 Space也满了，则再次进行YGC，剩余的存活者放入Survivor 1 Space。若Survivor 1 Space满了，继续YGC放回Survivor 0 Space。达到一定次数后（JVM参数MaxTenuringThreshold设置，默认15），还存活的对象，就会放入老年代。老年代满了以后会进行Full GC(重量级GC)进行内存清理，若老年代FGC还是无法满足对新对象的存储,就会产生OOM异常（OutOfMemoryError）。
   - 如果出现OOM异常，说明了java虚拟机内存不够，原因有二
     + java内存堆空间设置不够，可以通过调整-Xms、-Xmx来调整
     + 代码中创建了大量对象，并且长时间不能被垃圾回收机制回收（存在被引用）   
 + Survivor 0 Space 也叫from区，Survivor 1 Space叫to区，他俩不是固定的，即from区进行垃圾回收以后，把存活的复制到to区，然后清空from区。这时候他俩交换，这时候空的from区就变成了to区，而有存活对象的to区变成from区。幸存者区一定有一个是空的
 + eden和from、to区比例是 8：1：1，新生与老年区分别是1/3、2/3
-+ Young GC后，有一种情况是from区放不下存活的对象，这时候会部分放入老年代
++ Minor GC后，有一种情况是from区放不下存活的对象，这时候会部分放入老年代
 
-#### 永久代 Parmanent Gen
+#### 永久代 Parmanent Gen JDK7
 + 实际而言，`方法区Method Area`和`堆Heap`一样，是各线程共享区域，用于存储虚拟机加载的：类信息+普通常量+静态常量+编译器编译后代码等。**虽然JVM规范把它描述成堆的逻辑一部分，但它还有个名字叫Non-heap(非堆)，目的就是跟堆分开。**
 + 对于HotSpot虚拟机而言，很多开发者习惯把`方法区Method Area`描述成`永久代Parmanent Gen`,但严格意义上两者不同，或者说使用永久代来实现方法区而已，永久代是方法区（相当于一个接口interface）的一个实现。
 + `永久代Parmanent Gen`是一个常驻内存区域，用于存放JDK自身携带的Class,Interface的元数据，也就是说它存储运行环境必须的的类信息，被装进此区域的数据是不会被GC回收的，关闭JVM才会释放此区域占用的内存。
