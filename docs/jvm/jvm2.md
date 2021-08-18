@@ -16,6 +16,10 @@
 -Xmx | 设置分配最大内存，默认为物理内存的1/4 |
 -XX:+PrintGCDetails | 输出详细的GC处理日志
 
+::: tip
+-Xss 是调栈空间
+:::
+
 + 查看参数方法
 ````java
  public static void main(String[] args) {
@@ -34,5 +38,22 @@
 -Xmx -Xmx 把两者设置为一致,是为了避免频繁扩容和GC释放堆内存造成的系统开销/压力
 ::: 
 
-### GC收集日志信息
-//todo
+### GC收集日志信息 -XX:+PrintGCDetails
+````sh
+[GC (Allocation Failure) [PSYoungGen: 1708K->504K(2560K)] 1708K->688K(9728K), 0.0033197 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC (Allocation Failure) [PSYoungGen: 504K->496K(2560K)] 688K->768K(9728K), 0.0004713 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[Full GC (Allocation Failure) [PSYoungGen: 496K->0K(2560K)] [ParOldGen: 272K->619K(7168K)] 768K->619K(9728K), [Metaspace: 3290K->3290K(1056768K)], 0.0040743 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[GC (Allocation Failure) [PSYoungGen: 0K->0K(2560K)] 619K->619K(9728K), 0.0001987 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+[Full GC (Allocation Failure) [PSYoungGen: 0K->0K(2560K)] [ParOldGen: 619K->601K(7168K)] 619K->601K(9728K), [Metaspace: 3290K->3290K(1056768K)], 0.0039539 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+Heap
+ PSYoungGen      total 2560K, used 56K [0x00000000ffd00000, 0x0000000100000000, 0x0000000100000000)
+  eden space 2048K, 2% used [0x00000000ffd00000,0x00000000ffd0e348,0x00000000fff00000)
+  from space 512K, 0% used [0x00000000fff00000,0x00000000fff00000,0x00000000fff80000)
+  to   space 512K, 0% used [0x00000000fff80000,0x00000000fff80000,0x0000000100000000)
+ ParOldGen       total 7168K, used 601K [0x00000000ff600000, 0x00000000ffd00000, 0x00000000ffd00000)
+  object space 7168K, 8% used [0x00000000ff600000,0x00000000ff696620,0x00000000ffd00000)
+ Metaspace       used 3322K, capacity 4496K, committed 4864K, reserved 1056768K
+  class space    used 362K, capacity 388K, committed 512K, reserved 1048576K
+````
+
+<img :src="$withBase('/jvm/gcDetails.png')" alt="dock">
