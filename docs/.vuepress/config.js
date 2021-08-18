@@ -5,8 +5,8 @@ module.exports = {
         ['link', { rel: 'icon', href: `/favicon.ico` }],// 增加一个自定义的 favicon(网页标签的图标)
         ['meta',{'http-equiv':'Content-Security-Policy',content:"upgrade-insecure-requests"}]
       ],
-    //base: '/lidagen.github.io/',
-    base: '/vueblog/',
+    base: '/lidagen.github.io/',
+    //base: '/vueblog/',
     plugins: [
         [
             '@vuepress/register-components',
