@@ -300,7 +300,7 @@ public class WeakHashMapDemo {
 ##### 2.ParNew 并行收集器
 + ParNew并行收集器 其实就是Serial的并行多线程版本，最常见的应用场景是配合老年代的GMS GC工作。它是很多java虚拟机运行在Server模式下的默认垃圾回收器
   + 开启`-XX:+UseParNewGC`,开启后会使用**ParNew + Serial old**收集器组合
-    - 表示新生代老年代都使用串行垃圾回收器，新生代复制算法，老年代标记-整理算法
+    - 表示新生代老年代都使用串行垃圾回收器，**新生代并行复制算法，老年代标记-整理算法**
 ::: tip
 + 但是ParNew + Tenured（ParNew + Serial old）这样搭配已经不推荐
 + 这个组合新生代回收时并行，老年代回收时串行
