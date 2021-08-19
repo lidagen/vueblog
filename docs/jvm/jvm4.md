@@ -246,124 +246,149 @@ public class WeakHashMapDemo {
 
   - 使用`java -XX:+PrintFlagsInitial`命令看MetaspaceSize初始化值
   - 元空间内存不足，可以尝试调整 `-XX:MetaspaceSize=1024m`
-  
-
-### **GC垃圾回收算法和垃圾回收器的关系？
-+ 垃圾回收算法（计数、复制、标清、标整）是内存回收方法论，垃圾回收器是堆方法论的落地实现
-+ 目前还没有完美的垃圾回收器，只是对于不同场合，进行分代收集
-+ 四种主要的垃圾回收器
-  - `Serial 串行`：它为单线程环境设计并且只使用一个线程进行垃圾回收，会暂停所有用户线程。不合适服务器环境。
-  - `Parallel 并行`：多个垃圾收集器并行工作，此时用户线程也是暂停的，适应科学计算、大数据处理等弱交互场景。
-  - `CMS 并发`：用户线程和垃圾回收线程同时执行（不一定并行，也可能交替执行），不需要停顿用户线程，适应对响应时间有要求的场景。
-  - `G1` 
-
-### **怎么查看生产上垃圾回收器是哪个？生产上如何配置垃圾回收器的
-+ `java -XX:+PrintCommandLineFlags -version`查看默认垃圾回收器
-  - 默认Parallel
-+ 配置垃圾回收器有哪些 
-
-----------------------------------------------------------------
-#### 垃圾回收器图
-+ `Serial` `Parallel` `ParNew`是运行在新生代的垃圾回收器
-+ `Serial MSC` `Parallel Old` `CMS`是运行在老年代的垃圾回收器
-+ 确定了新生代的垃圾回收器，系统会自动选择匹配的老年代垃圾回收器
-+ G1回收器是跨越新生代、老年代的垃圾回收器
-+ X号的表示被废弃的组合
-<img :src="$withBase('/jvm/gcq1.png')" alt="dock">
-
-  - UseSerialGC
-  - UseParallelGC
-  - UseConcMarkSweepGC  (CMS 是缩写)
-  - UseParNewGC (只在新生代使用并行垃圾回收器)
-  - UseParallelOldGC (只在老年代使用并行垃圾回收器)
-  - UseG1GC
-
-+ 如何选择垃圾回收器  
-
-  - 预先参数说明（PrintGCDetails 看的参数对应）
-    + DefNew -> Default New Generation
-    + Tenured -> old
-    + ParNew -> Parallel New Generation 
-    + PSYoungGen -> Parallel Scavenge 
-    + ParOldGen -> Parallel Old Generation
-  - Server/Client模式 （只需掌握Server模式，Client模式基本不用）
-    + 32位win系统，默认Client模式
-    + 32位其它系统，2G内存同时2个CPU以上Server模式，低于该配置Client模式
-    + 64位都是Server模式  
-#### 新生代收集器    
-##### 1.Serial串行收集器
-+ Serial串行收集器 是最稳定最高效的收集器，缺点是会暂停用户线程，对于单核CPU，没有线程交互使用此收集器可以获取最高的垃圾回收效率。
-    + 因此Serial垃圾回收器是java虚拟机运行在Client模式下的新生代垃圾回收器
-    + 开启 `-XX:+UseSerialGC`,开启后默认使用 **Serial + Serial old**收集器组合
-      - 表示新生代老年代都使用串行垃圾回收器，新生代复制算法，老年代标记-整理算法
-
-##### 2.ParNew 并行收集器
-+ ParNew并行收集器 其实就是Serial的并行多线程版本，最常见的应用场景是配合老年代的GMS GC工作。它是很多java虚拟机运行在Server模式下的默认垃圾回收器
-  + 开启`-XX:+UseParNewGC`,开启后会使用**ParNew + Serial old**收集器组合
-    - 表示新生代老年代都使用串行垃圾回收器，**新生代并行复制算法，老年代标记-整理算法**
-::: tip
-+ 但是ParNew + Tenured（ParNew + Serial old）这样搭配已经不推荐
-+ 这个组合新生代回收时并行，老年代回收时串行
-:::  
-##### 3.ParallelScavenge收集器  
-+ ParallelScavenge收集器 是一个类似ParNew,也是一个新生代垃圾收集器，新生代老年代都是串行化。
-  - 开启`-XX:+UseParallelGC`或`-XX:+UseParallelOldGC`可相互激活（二选一都可），不配置系统默认就是这个
-+ 它关注重点是：
-  - 可控的吞吐量(Thoughput=运行用户代码时间/(运行用户代码时间+垃圾回收时间)，即比如运行运行100分钟，垃圾回收1分钟。吞吐量就是99%)。高吞吐量意味着高效利用CPU时间，它多用于在后台运算而不需要太多交互的任务。（比如job？）
-  - 自适应调节策略也是ParallelScavenge收集器与ParNew收集器的一个重要区别。（自适应调节策略：虚拟机会根据当前系统运行情况收集性能监控信息，动态调整这些参数提供最适合的停顿时间（-XX:MaxGCPauseMillis）或最大吞吐量）
-  ::: tip
-  + -XX:ParallelGCThreads=数字N，可配置GC线程个数
-    - CPU > 8 N= 5/8
-    - CPU < 8 N = 实际数
-  :::
-
-  #### 老年代收集器
-
-  ##### 4.ParallelOld收集器
-  + ParallelOld收集器是ParallelScavenge收集器的老年代版本，使用**多线程标记-整理算法**
-  + jdk8以后可以考虑Parallel Scavenge + Parallel Old搭配（ParallelOld是jdk6以后提供，jdk6之前默认 ParallelScavenge + Serial Old搭配）
-    - 开启`-XX:+UseParallelOldGC`
-
-  ##### 5.CMS（ConcMarkSweep）并发标记清除收集器
-  + CMS收集器是一种 **获取最短回收停顿时间为目标的收集器。** 适应互联网或者B/S系统服务器，这类应用重视服务响应速度，希望系统停顿时间最短。
-  + CMS非常适合堆内存大，CPU核数多的服务端应用，也是G1出现前的首选收集器。
-  + 用户线程和GC线程并发
-    - 开启`-XX:+UseConcMarkSweepGC`，开启后新生代默认使用ParNew。
-    - 开启后，收集器组合是 `ParNew(新生代) + CMS（老年代）+Serial old（老年代）` 的组合，Serial Old是作为CMS出错后的后备收集器。
-  + CMS运行的4步过程
-    - 初始标记 ：只是标记一下GC Roots能直接关联的对象，速度很快，仍然需要暂停所有工作线程
-    - 并发标记 ：进行GC Roots跟踪过程，和用户线程一起工作，不需要暂停工作线程。主要标记过程，标记全部对象
-    - 重新标记 : 为了修正并发标记过程中，因用户程序运行产生的一小部分对象变动。仍然需要暂停所有工作线程 
-    - 并发清除 ：清除了GC Roots不可达对象，和用户线程一起工作，不需要暂停工作线程。 
-  ::: tip
-  + 由于耗时最长的 **并发标记 + 并发清除**都是和用户线程一起工作，所以总体可以看作CMS垃圾回收和用户线程是并发执行。
-  + 优点：并发收集低停顿
-  + 缺点：1.并发堆CPU压力比较大（由于CMS必须要在老年代堆内存用尽之前完成垃圾回收，否则CMS回收失败时，会触发Serial Old进行GC，从而造成较大停顿）2.采用标记清除算法会产生大量空间碎片
-  + 由于标记清除无法处理空间碎片，老年代空间迟早会被耗尽，最后不得不通过担保机制Serial Old来对内存压缩。CMS也提供了参数-XX:CMSFullGCsBeForeCompaction(默认0，即每次都进行内存整理)来指定多少次CMS收集以后，进行一次压缩的Full GC
-
-  :::  
-  ##### 6.SerialOld收集器
-  + Serial Old垃圾收集器是Serial的老年代版本，同样是单线程收集器，使用的是**标记-整理算法**，也是client默认的老年代收集器
-    - 作为CMS收集器的后备老年代收集器（实际JDK8+已经淘汰掉了，不主动配置此收集器）
-#### 组合选择
-+ 单CPU小内存
-  - `-XX:+UseSerialGC`
-+ 多CPU，需要大吞吐量，接受小停顿
-  - `-XX:+UseParllelGC` 或 `-XX:+UseParllelOldGC`
-+ 多CPU，追求低停顿，快速响应
-  - `-XX:+UseConcMarkSweepGC` `-XX:+ParNewGC` 
-
-参数 | 新生代收集器 |  新生代算法 | 老年代收集器 | 老年代算法  
-- | :-: | :-: | :-: | -:
-`-XX:+UseSerialGC` | Serial | 复制 | Serial Old | 标整
-`-XX:+UseParNewGC` | ParNew | 复制 | Serial Old | 标整
-`-XX:+UseParallelGC`  `-XX:+UseParallelOldGC` | Parallel[Scavenge] | 复制 | Parallel Old | 标整
-`-XX:+UseConcMarkSweepGC` |ParNew | 复制 | CMS + Serial Old | 标清
-`-XX:+UseG1GC` |G1整体使用标记-整理算法 | 局部使用复制算法，不会产生内存碎片 |  | 
-
-### **G1垃圾回收器  
-+ 
+   
 ### 生产环境服务器变慢的诊断思路、以及如何性能评估
+#### Linux 命令
++ 整机:`top`  查看cpu和内存占用情况
+  - 查看右上角系统负载load average三个值（分别代表系统1分钟5分钟15分钟评价负载值）：如果三个数相加除3乘100% > 60%,说明负载较高
+  - `uptime`是精简版
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# top 
+top - 15:33:29 up 175 days, 7 min,  1 user,  load average: 0.03, 0.08, 0.03
+Tasks: 127 total,   3 running, 124 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.4 us,  0.7 sy,  0.0 ni, 97.3 id,  0.0 wa,  0.7 hi,  0.0 si,  0.0 st
+MiB Mem :   1827.0 total,     98.1 free,   1555.5 used,    173.5 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    114.4 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                                                                                            
+2528486 root      10 -10  172348  14048   2320 S   1.0   0.8 269:14.93 AliYunDun                                                                                          
+   1806 root      20   0 2461016 162656      0 S   0.3   8.7 170:27.97 java                                                                                               
+  43823 mysql     20   0 1355804 393768      0 S   0.3  21.0   1043:15 mysqld                                                                                             
+ 176259 rabbitmq  20   0 1728248  82408    528 S   0.3   4.4 549:16.42 beam.smp                                                                                           
+3593818 root      20   0   67436   3056   2260 R   0.3   0.2   0:00.46 top                                                                                                
+      1 root      20   0  244704   4952   1928 S   0.0   0.3   5:29.53 systemd                                                                                            
+      2 root      20   0       0      0      0 S   0.0   0.0   0:02.26 kthreadd                                                                                           
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp                                                                                             
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par_gp                                                                                         
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/0:0H-kblockd                                                                               
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_percpu_wq                                                                                       
+      9 root      20   0       0      0      0 S   0.0   0.0   2:05.13 ksoftirqd/0                                                                                        
+     10 root      20   0       0      0      0 R   0.0   0.0  14:30.61 rcu_sched                                                                                          
+     11 root      rt   0       0      0      0 S   0.0   0.0   0:00.00 migration/0                                                                                        
+     12 root      rt   0       0      0      0 S   0.0   0.0   0:00.99 watchdog/0                                                                                         
+     13 root      20   0       0      0      0 S   0.0   0.0   0:00.00 cpuhp/0                                                                                            
+     15 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kdevtmpfs                                                                                          
+     16 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 netns                                                                                              
+     17 root      20   0       0      0      0 S   0.0   0.0   0:01.30 kauditd                                                                                            
+     18 root      20   0       0      0      0 S   0.0   0.0   0:09.74 khungtaskd                                                                                         
+     19 root      20   0       0      0      0 S   0.0   0.0   0:00.00 oom_reaper                                                                                         
+     20 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 writeback                                                                                          
+     21 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kcompactd0                                                                                         
+     22 root      25   5       0      0      0 S   0.0   0.0   0:00.00 ksmd                                                                                               
+     23 root      39  19       0      0      0 S   0.0   0.0   2:38.96 khugepaged  
+````  
+
++ CPU:`vmstat` 查看cpu（包含不限于）
+  - 主要看procs和cpu
+    + procs中r是运行b是阻塞
+      + r 运行和等待cpu时间片的进程数（(7+0+2)/3），原则上1核cpu运行队列要超过2，整个系统运行队列不能超过总核数的2倍，负责代表系统压力大
+      + b 等待资源的进程数，比如等待磁盘IO 网络IO等
+    + cpu 
+      - us 用户进程消耗cpu时间百分比，us值高，用户进程消耗CPU时间多，如果长期大于50%，优化程序
+      - sy 内核进程消耗cpu时间百分比  
+      - us + sy 如果大于80（即80%）说明存在cpu不足
+  - 额外查询
+    + 查所有cpu核信息 `mpstat -P ALL 2`
+    + 查具体进程cpu用量`pidstat -u 1 -p 进程号`      
+
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# vmstat -n 2 3 //每两秒采样一次，共计三次
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 7  0      0  93436      0 182224    0    0    29     8    2    2  2  2 97  0  0
+ 0  0      0  93376      0 182224    0    0     0     0  640 1663  2  2 96  0  0
+ 2  0      0  93376      0 182228    0    0     0     9  675 1705  2  2 96  0  0
+````
+
++ 内存:`free` 应用程序可用的内存数
+  + 应用程序可用/系统物理内存 > 70% 内存充足
+  + 应用程序可用/系统物理内存 < 20% 内存不足
+  - 额外查询 `pidstat -p 进程号 -r 采样间隔秒数`  
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# free -m //MB单位显示
+              total        used        free      shared  buff/cache   available
+Mem:           1826        1566          95          13         165         101
+Swap:             0           0           0
+
+````  
++ 硬盘：`df` 查看磁盘剩余
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        899M     0  899M   0% /dev
+tmpfs           914M   60K  914M   1% /dev/shm
+tmpfs           914M  652K  913M   1% /run
+tmpfs           914M     0  914M   0% /sys/fs/cgroup
+/dev/vda1        40G  7.1G   33G  18% /
+tmpfs           183M     0  183M   0% /run/user/0
+overlay          40G  7.1G   33G  18% /var/lib/docker/overlay2/c35afb1b262c3b56af10b0ca667cbc2429f5dee881494ed34c185b7b80eece5f/merged
+shm              64M     0   64M   0% /var/lib/docker/containers/88b53c86c3bb7c1a22417ff2776b76ca18f49d102b88145febfaa274a7515f1c/mounts/shm
+overlay          40G  7.1G   33G  18% /var/lib/docker/overlay2/74673bee00adfa946eba8a2182fdaab921bb44d867885c318d265531db45a25f/merged
+shm              64M     0   64M   0% /var/lib/docker/containers/d216f33687c30c2412dfba04397b3c25289d7541b077ff6d374b7bda4e4120cb/mounts/shm
+````
+
++ 磁盘IO:`iostat`
+  - rkB/s每秒读取数据量kB
+  - wkB/s每秒写入数据量kB
+  - svctm I/O 请求的平均服务时间，毫秒
+  - await I/O 请求的平均等待时间，毫秒
+  - **util 一秒钟有百分之几的时间用于IO操作，解决100%时，表示磁盘带宽跑满，需要优化程序或者增加磁盘**
+  - svctm await的值很接近，说明几乎没有IO等待，磁盘性能好，如果await 远高于 svctm，表示IO队列等待过长，需要优化程序或者增加磁盘
+
+  - 查看额外 `pidstat -d 采样间隔秒数 -p 进程号`
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# iostat -xdk 2 3
+Linux 4.18.0-193.28.1.el8_2.x86_64 (iZbp1f96jelc5vbwqq8habZ) 	08/19/2021 	_x86_64_	(1 CPU)
+
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+vda              0.80    0.66     28.41      7.51     0.00     0.08   0.13  10.70    3.16    1.84   0.00    35.43    11.32   0.45   0.07
+
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+vda              0.00    0.50      0.00      5.97     0.00     0.00   0.00   0.00    0.00    1.00   0.00     0.00    12.00   1.00   0.05
+
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+vda              0.00    1.00      0.00     13.25     0.00     0.00   0.00   0.00    0.00    1.00   0.00     0.00    13.25   1.00   0.10
+````
++ 网络IO:`ifstat`
+  - 默认本地没有，需要下载ifstat
+
 ### 生产环境CPU占用过高的可能原因
+#### 需要结合JDK核Linux一起排查
++ 1.先用top命令找出cpu占用最高的
++ 2.ps -ef java 或者jps进一步定位，得知是一个什么后台程序获取进程号
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# jps -l
+3596983 sun.tools.jps.Jps
+1326 /usr/lib/jenkins/jenkins.war
+1806 gutley-0.0.1-SNAPSHOT.jar
+79582 org.apache.rocketmq.namesrv.NamesrvStartup
+````
+````sh
+[root@iZbp1f96jelc5vbwqq8habZ ~]# ps -ef|grep gutley|grep -v grep
+root        1806       1  0 Feb25 ?        02:50:30 java -jar gutley-0.0.1-SNAPSHOT.jar --server.port=80
+````
++ 3.**定位到具体线程或者代码**
+  - `ps -mp 1806(jps查到的进程号) -o THREAD,tid,time`
+    + 找到cpu消耗最大的线程号
+
++ 4.将需要的线程ID转换成16进制格式（英文小写格式）
+  - `printf "%x\n" 线程号`
+
++ 5.jstack进程ID|grep tid 16进制格式（英文小写格式）-A60
+  - `jstack 180（进程号） |grep 717（打印出来的16进制线程ID） -A60 (打印前60行)`
+  ````sh
+  jstack 1806 |grep 717 -A60
+  ````
 ### JDK自带的JMM监控和性能分析工具用法
+//todo
 

@@ -232,6 +232,7 @@ module.exports = {
                     ['/jvm/jvm1', 'JVM体系架构概述 '],
                     ['/jvm/jvm2', '堆参数调整'],
                     ['/jvm/jvm3', 'GC 分代收集算法'],
+                    ['/jvm/jvm5', 'JVM 垃圾回收器'],
                     ['/jvm/jvm4', 'JVM 相关问题'],
                 ]
             },
