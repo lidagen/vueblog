@@ -217,12 +217,8 @@ module.exports = {
                 title:'MQ',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/kafka/kafka1','Kafka基础'],
-                    ['/kafka/kafka2','Kafka高级'],
-                    ['/kafka/kafka3','Kafka应用'],
-                    ['/rabbitmq/rabbit基础','rabbitMQ基础'],
-                    ['/rabbitmq/rabbit高级','rabbitMQ高级'],
-                    ['/rabbitmq/rabbit集群','rabbitMQ集群'],
+                    ['/rabbitmq/rb1','rabbitMQ基础'],
+                    ['/rabbitmq/rb2','rabbitMQ高级'],
                 ]
             },
             {
@@ -252,6 +248,7 @@ module.exports = {
                     ['/juc/tool', 'JUC tools'],
                     ['/juc/blockingQueue', 'BlockingQueue 阻塞队列'],
                     ['/juc/executor', 'Executor 线程池'],
+                    ['/juc/completableFuture', 'CompletableFuture'],
                     ['/juc/deadLock', '死锁以及问题定位分析'],
                 ]
             },
