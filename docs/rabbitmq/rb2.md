@@ -121,5 +121,3 @@ spring.rabbitmq.listener.direct.acknowledge-mode=manual
   - 解决方案就是消息接收方接收消息也落DB，接收消息第一步先判断数据库是否存在该消息
   -  `乐观锁解决方案`也可以，在业务数据操作时判断是否已经有消息被消费  
 
-### 三、集群搭建
-#### RabbitMQ高可用集群搭建

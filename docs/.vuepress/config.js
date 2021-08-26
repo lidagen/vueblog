@@ -219,6 +219,7 @@ module.exports = {
                 children:[
                     ['/rabbitmq/rb1','rabbitMQ基础'],
                     ['/rabbitmq/rb2','rabbitMQ高级'],
+                    ['/rabbitmq/rb3','rabbitMQ集群'],
                 ]
             },
             {
