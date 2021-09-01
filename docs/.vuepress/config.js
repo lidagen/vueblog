@@ -111,10 +111,8 @@ module.exports = {
                 title:'Spring源码',
                 collapsable: true, // 可折叠
                 children:[
-                    ['/spring/springSource/springSummary','Spring概述'],
-                    ['/spring/springSource/IOC','ioc'],
-                    ['/spring/springSource/AOP','aop'],
-                    ['/spring/springSource/BeanDefinitionReader','BeanDefinitionReader'],
+                    ['/spring/springSource/springBoot','SpringBoot'],
+                   
                 ]
             },
             {
