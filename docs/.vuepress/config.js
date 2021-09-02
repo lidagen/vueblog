@@ -107,22 +107,15 @@ module.exports = {
                     ['/spring/springAlibaba2','SpringCloud Alibaba Sentinel'],
                 ]
             },
-            {
-                title:'Spring源码',
-                collapsable: true, // 可折叠
-                children:[
-                    ['/spring/springSource/springBoot','SpringBoot'],
-                   
-                ]
-            },
+    
             {
                 title:'Spring',
                 collapsable: true, // 可折叠
                 children:[
+                    ['/spring/springSource/springBoot','SpringBoot'],
                     ['/spring/springDataJpa','Spring-data-jpa入门'],
-                    ['/spring/springcloudms','SpringCloud面试题'],
+                    ['/spring/springcloudms','SpringCloud问题'],
                     ['/spring/dispatcherServlet','dispatcherServlet 源码分析'],
-                    ['/spring/applicationContext','Spring容器启动流程'],
                     ['/spring/springBootApplication','@SpringBootApplication注解内部实现与原理'],
                     ['/spring/springInit','spring启动初始化初始化'],
                   

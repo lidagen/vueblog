@@ -16,6 +16,7 @@
 + 关系型数据库，把原本非常形象的对象，拍平了，拍成各个字段，存在数据库，查询时，再重新构造出对象；ES则是文档存储，把对象原原本本地放进去，取出时直接取出。
  - Mysql基于B+树索引，来实现快速检索，ES则基于**倒排索引**，对于文档搜索来说，倒排索引在性能和空间上都有更加明显的优势。  
 #### 倒排索引
++ 普通索引是根据文档找关键字，倒排索引是根据关键字找文档
 
 #### ES 对比 Solr
 + Solr使用ZK进行分布式关联，ES使用自带分布式协调器
@@ -60,93 +61,284 @@
 + `http://localhost:9200/`访问是否启动
 
 ### 文档管理(CRUD)
-#### 创建索引 
-+ 在ElasticSearch索引中，对应于CRUD中的“创建”和“更新” - 如果对具有给定类型的文档进行索引，并且要插入原先不存在的ID。 如果具有相同类型和ID的文档已存在，则会被覆盖。
-````sh
-#创建一个json数据，REST API创建一个POST请求
-#格式为 http://localhost:9200/<index>/<type>
 
-curl -XPOST "http://localhost:9200/movies/1" -d'
-{
-  "title":"双旗镇刀客",
-	"country":"中国",
-	"actor":["高伟","赵玛娜","孙海英"],
-	"date":1991
-}'
+#### 索引Index-创建
+````sh
+#创建一个shopping的索引，幂等
+curl -XPUT "http://localhost:9200/shopping" -d''
+````
+#### 索引Index-查询&删除
+````sh
+#查询shopping索引
+curl -XGET "http://localhost:9200/shopping" -d''
+
+#查询所有索引信息
+curl -XGET "http://localhost:9200/_cat/indices?v" -d''
+
+#删除索引
+curl -XDELETE "http://localhost:9200/shopping" -d''
 ````
 
-#### 更新索引
-+ 现在，在索引中有了一部电影信息，接下来来了解如何更新它，添加一个类型列表。要做到这一点，只需使用相同的ID索引它。使用与之前完全相同的索引请求，但类型扩展了JSON对象。
+#### 文档Doucument-创建Post
++ 索引创建完了，添加Documents，新版本没有表的概念了，直接索引后面添加数据
++ _doc就是这个索引的type,也可以写为_create，固定写法
 ````sh
-# 对增加的数据，增加一位演员王刚(id可以查询索引获得)
-# 格式为  http://localhost:9200/<index>/<type>/id
-curl -XPOST "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d'
+# 文档添加，需要json数据,该操作不幂等
+curl -XPOST "http://localhost:9200/shopping/_doc" -d'
 {
-  "title":"双旗镇刀客",
-	"country":"中国",
-	"actor":["高伟","赵玛娜","孙海英","王刚"],
-	"date":1991
-}'
-````
-
-#### 删除文档
-+ 通过ID从索引中删除单个指定的文档，使用与获取索引文档相同的URL，只是这里将HTTP方法更改为DELETE
-````sh
-# DELETE请求，http://localhost:9200/<index>/<type>/<id>
-curl -XDELETE "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d''
-````
-
-#### 查询索引
-+ _search端点 ：我们使用_search端点，可选择使用索引和类型。也就是说，按照以下模式向URL发出请求：`<index>/<type>/_search`其中，index和type都是可选的。
-+ 换句话说，为了搜索电影，可以对以下任一URL进行POST请求
-  - `http://localhost:9200/_search` - 搜索所有索引和所有类型。
-  - `http://localhost:9200/movies/_search` - 在电影索引中搜索所有类型
-  - `http://localhost:9200/movies/1/_search` - 在电影索引中显式搜索电影类型的文档。
-+ 由id获取文档/索引
-````sh
-# GET请求，http://localhost:9200/<index>/<type>/<id>
-# 3c76u3IBYkxQ-7Tf2f5-为双旗镇刀客的id
-curl -XGET "http://localhost:9200/movies/1/3c76u3IBYkxQ-7Tf2f5-" -d''
-````  
-
-#### 搜索请求正文和ElasticSearch查询DSL
-+ 如果只是发送一个请求到上面的URL，我们会得到所有的电影信息。为了创建更有用的搜索请求，还需要向请求正文中提供查询。 请求正文是一个JSON对象，除了其它属性以外，它还要包含一个名称为`query`的属性，这就可使用ElasticSearch的查询DSL。
-````sh
-{
-    "query": {
-        //Query DSL here
-    }
+	"name":"小米4",
+	"price":1999
 }
-````
-##### 基本自由文本搜索
-````sh
-# 搜索title中包含“那山”关键字的电影
-curl -XPOST "http://localhost:9200/_search" -d'
+'
+# 自定义ID 1001添加文档
+curl -XPOST "http://localhost:9200/shopping/_doc/1001" -d'
 {
-    "query": {
-        "query_string": {
-            "query": "那山"
-        }
-    }
-}'
+	"name":"小米4",
+	"price":1999
+}
+'
 ````
-##### 指定搜索的字段
+#### 主键查询&全查询
 ````sh
-# 搜索country中包含“中国”关键字的电影
-curl -XPOST "http://localhost:9200/_search" -d'
-{
-    "query": {
-        "query_string": {
-            "query": "中国",
-            "fields": ["country"]
-        }
-    }
-}'
+#主键查询
+curl -XPOST "http://localhost:9200/shopping/_doc/1001" -d''
+#全部查询 会查询所有索引
+curl -XPOST "http://localhost:9200/_search" -d''
 ````
-### ES进阶
-### ES集成
-### ES优化
-### ES相关问题
+#### 全量修改&局部修改&删除
+````sh
+#全量修改，该index下的1001数据修改，幂等
+curl -XPUT "http://localhost:9200/shopping/_doc/1001" -d'
+{
+	"name":"小米5",
+	"price":3999
+}
+'
+
+
+#局部修改，该index下的1001数据修改，POST不幂等
+#_update代表局部修改，json数据doc表现对文档修改，name是具体修改的哪一个值
+curl -XPOST "http://localhost:9200/shopping/_update/1001" -d'
+{
+	"doc":{
+	  "name":"华为"
+	}
+}
+'
+
+#删除文档
+curl -XDELETE "http://localhost:9200/shopping/_doc/1001" -d''
+````
+#### 条件查询&分页查询&查询排序
+````sh
+#条件查询1
+curl -XGET "http://localhost:9200/shopping/_search?q=name:华为" -d''
+
+#条件查询2 query代表条件查询，match匹配
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match":{
+			"name":"华为"
+		}
+	}
+}
+'
+
+#查询全部
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match_all":{
+		}
+	}
+}
+'
+
+#分页查询 from起始页，size每页大小
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match_all":{
+		}
+	},
+	"from":0,
+	"size":2
+}
+'
+
+#查询排序&查询控制,_source指定想要查询的参数
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match_all":{
+		}
+	},
+	"from":0,
+	"size":2,
+  "_source":["price"],
+  "sort":{
+		"price":{
+			"order":"desc"
+		}
+	}
+}
+'
+````
+#### 多条件查询&范围查询
+````sh
+# 多条件查询,must代表多条件都需要匹配，类似SQL的and ,should代表or，可以替换must
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"bool":{
+			"must":[
+				{
+					"match":{
+						"name":"华为"
+					}
+				},
+				{
+					"match":{
+						"price":4999
+					}
+				}
+			]
+		}
+	}
+}
+'
+
+#范围查询 增加filter做范围查询，如果should，match不生效，会查到华为以外的，must只会查名字叫华为且价格大于3000数据
+ 
+{
+	"query":{
+		"bool":{
+			"must":[
+				{
+					"match":{
+						"name":"华为"
+					}
+				}
+			],
+			"filter":{
+				"range":{
+					"price":{
+						"gt":3000
+					}
+				}
+			}
+		}
+	}
+}
+'
+````
+#### 全文检索&完全匹配&高亮查询
+````sh
+#全文检索 如果我们匹配了米华，分词会把小米和华为都查出来，
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match":{
+			"name":"米华"
+		}
+	}
+}
+'
+#完全匹配 这样只能搜到名字带华的了，如果写米华匹配不成功
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match_phrase":{
+			"name":"华"
+		}
+	}
+}
+'
+#高亮查询 fields代表要高亮的字段名
+curl -XPOST "http://localhost:9200/shopping/_search" -d'
+{
+	"query":{
+		"match_phrase":{
+			"name":"华"
+		}
+	},
+	"highlight":{
+		"fields":{
+			"name":{}
+		}
+	}
+}
+'
+````
+#### 聚合查询
+````sh
+````
+#### 映射关系
+````sh
+# 创建一个student的索引 并且设置mapping
+curl -XPUT "http://localhost:9200/student/_mapping" -d'
+{
+	"properties":{
+		"name":{
+			"type":	"text",
+			"index":true
+		},
+		"sex":{
+			"type":	"keyword",
+			"index":true
+		},
+		"phone":{
+			"type":	"keyword",
+			"index":false
+		}
+	}
+}
+'
+# name这个属性是分词的，type类型是text,且为true
+# sex这个数据必须完全匹配才能查询，"type":	"keyword"
+# phone这个不能作为查询条件的	"type":	"keyword","index":false 不支持查询
+````
+
+### Java API
+
+### 集群部署
++ 集群提供可扩展的容量，且高可用，并发处理高，生产环境应用运行在集群中
+
+#### 集群Cluster
++ 一个集群是由一个或者多个服务节点组织在一起，共同持有整个数据，并一起提供索引和搜索服务。一个ES集群有一个唯一的名称标识。这个名字默认为`elasticsearch`,这个名字是重要的，因为节点是通过集群名称来加入的。
+
+#### 节点Node
++ 集群包含多个节点，它参与集群的索引和搜索功能
++ 节点也是有名称的，默认情况下是一个随机的漫威角色名，这个名字会在节点启动时赋予。节点名称对于管理也是重要的，在管理过程中，需要确定网络中哪些服务器对于集群中的哪些节点。
++ 一个节点可以通过配置集群名称加入集群，如果你启动了若干节点，并假定它们彼此互相发现，那么它们就自动的形成并加入集群中。
+
+#### Windows集群
+#### Linux集群
+
+### ES核心
+#### 系统架构
+#### 单节点集群
+#### 故障转移
+#### 水平扩容
+#### 应对故障
+#### 路由计算&分片控制
+#### 数据写流程
+#### 数据读流程
+#### 更新流程&批量操作流程
+#### 倒排索引
+#### 文档搜索
+#### 文档刷新&文档刷写&文档合并
+#### 文档分析
+#### 文档控制
+#### 文档展示-kibana
+
+### 集成
+
+### 优化
+
+### 问题集
+
 
 
 
