@@ -127,11 +127,13 @@ module.exports = {
                 children:[
                     ['/middleware/zookeeper','分布式协调服务器Zookeeper'],
                     ['/middleware/dubbo','服务治理Dubbo'],
-                    ['/middleware/elasticJob','分布式调度平台ElasticJob'],
                     ['/middleware/apollo','分布式配置管理平台Apollo'],
                     ['/middleware/kafka','消息中间件框架Kafka'],
-                    ['/middleware/elacticsearch','全文检索服务Elactic Search'],
-                    ['/middleware/kibana','可视化分析工具Kibana'],
+                    ['/elk/elasticJob','分布式调度平台ElasticJob'],
+                    ['/elk/kibana','可视化分析工具Kibana'],
+                    ['/elk/es0','ElacticSearch 基础'],
+                    ['/elk/es1','ElacticSearch进阶'],
+                    ['/elk/es2','ElacticSearch集成'],
                 ]
             },
             {
