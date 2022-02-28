@@ -256,6 +256,13 @@ module.exports = {
                     ['/activiti/actVariable','流程变量'],
                 ] 
             },
+            {
+                title:'Kubernetes',
+                collapsable: true,
+                children:[
+                    ['/k8s/k8s基础','k8s基础'],
+                ] 
+            },
         ]
     }
 }
