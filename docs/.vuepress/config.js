@@ -144,6 +144,7 @@ module.exports = {
                     ['/build/dockerCompose','DockerCompose服务编排'],
                     ['/build/nginx','负载均衡Nginx'],
                     ['/build/nginx1','Nginx的安装配置'],
+                    ['/k8s/k8s基础','K8S基础'],
                 ]
             },
             {
