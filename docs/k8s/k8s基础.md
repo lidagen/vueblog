@@ -119,8 +119,6 @@
 + **fluentd**
   - fluentd是一个守护进程，可提供cluster-level logging.。
 
-  
-
 
 
 
