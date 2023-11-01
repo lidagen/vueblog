@@ -11,7 +11,7 @@ git commit -m 'commit vueblog'
 
 # 如果发布到 https://<USERNAME>.github.io
 git push -f https://github.com/lidagen/vueblog.git master
-git push -f https://gitee.com/GENDALI/vueblog.git master
+# git push -f https://gitee.com/GENDALI/vueblog.git master
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git master:gh-pages
