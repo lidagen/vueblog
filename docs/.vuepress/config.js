@@ -28,6 +28,7 @@ module.exports = {
                 {text:'python+django',  link: '/knowledge/django'},
                 {text:'vue cli搭建项目',  link: '/knowledge/vuecli'},
                 {text:'babel es6转换es5',  link: '/knowledge/es6Trnsferes5'},
+                {text:'docker aliyun配置',  link: '/build/dockerAliyun'},
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
                 {text:'Ubuntu 下Linux 命令',  link: '/knowledge/ubuntu'},
