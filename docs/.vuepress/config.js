@@ -32,6 +32,7 @@ module.exports = {
                 {text:'npm 配置',  link: '/knowledge/npm'},
                 {text:'linux 常用命令',  link: '/knowledge/linux'},
                 {text:'Ubuntu 下Linux 命令',  link: '/knowledge/ubuntu'},
+                {text:'Shell 命令',  link: '/build/shell'},
             ]
              },
             { text: 'link',        // 这里是下拉列表展现形式。
