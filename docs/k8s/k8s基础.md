@@ -121,9 +121,117 @@
 
 
 
+## kubernetes
+
+### 理解为什么需要k8s
++ 可以对多个容器提供编排能力,运行 管理一组多个容器以及容器之间共同使用到的,如桥连网络段,如创建的数据卷Volume,也可以在多个容器间共享
++ 容器需要部署在多个机器上,需要配置跨主机的容器通信方案(非手动,因为难以维护容器间所有通信规则,iptables转发规则,docker+flannel解决了docker跨主机通信)
++ 容器运行在多个机器上,如何确保容器资源使用率监控,容器内服务监控
+
+### k8s是什么,解决了什么问题
++ 纯docker运行模式,是一个docker主机,单独管理部署一堆容器应用,数量多了以后,配置复杂之后,难以维护.且跨主机的容器集群,更加难维护
+  - 业务容器数量庞大,哪些容器部署在哪些节点,使用了哪些端口,如果记录,管理,需要登录到每台机器去管理?
+  - 跨主机通信,多个机器之间如果相互调用,ipstables规则手动维护?
+  - 跨主机容器相互调用,配置如何写?写死固定ip+port?
+  - 如果实现高可用?多个容器对外提供服务如何负载均衡
+  - 容器业务中断了,如何感知?感知到以后,如何自动重启新的容器?
+  - 如何实现滚动升级保证业务连续性
+### k8s特性
++ 自动化上线和回滚
++ 存储编排
++ 自动装箱
++ IPV4/IPV6双协议线
++ 自我修复
++ 服务发现于负载均衡
++ Secret和配置管理
++ 批量执行
++ 水平扩缩
++ 为拓展性设计
+
+### k8s核心组件
+'''
+提供了很多的组件,方便用户从各个角度,更好的维护,管理容器
+1.容器的运行高可用,数量保障,版本升级,扩容,缩容
+2.容器间网络关系
+3.容器间数据共享
+4.容器内配置文件加密
+5.xxx
+'''
+
++ `etcd` 保存了集群的状态,分布式高性能数据库
++ `api-server` 提供了资源操作的唯一入口,并提供认证 授权 访问控制 api注册与发现机制
++ `controller manager` 负责维护集群状态,比如故障检测 自动扩展 滚动更新
++ `scheduler` 负责资源的调度,按照预订调度策略将pod调度到相应的node节点上
++ `kubelet` 负责维护容器的生命周期,同时也负责Volume(CVI)和网络(CNI)的管理.
+  - 运行在每个node节点上的代理软件,脏活累活都是它干
+  - pod管理:
+    + kubelet定期从监听的数据源获取节点上pod/container的期望状态(运行什么容器,运行的副本数量,网络或者存储如何配置等),并调用对应容器平台接口达到这个状态
+  - 容器健康检查
+  	+ kubelet创建了容器之后还要查看容器是否正常运行,如果容器运行出错,就要根据pod设置的重启策略处理
+  - 容器监控
+    + kubelet会监控所在节点的资源使用情况,并定时向master报告,资源使用数据都是通过cAdvisor获取,知道整个集群所有节点资源情况,对pod调度和正常运行至关重要.
++ Container runtime 负责镜像管理以及pod和容器的真正运行(CRI)
++ kube-proxy 负责为Service提供cluster内部的服务发现和负载均衡,主要提供iptables,ipvs规则
++ kubectl:
+	- 命令行接口,用于对集群运行命令
+
+### 理解pod创建过程,与效果
++ pod创建过程
+'''
+1.在master节点,写入yaml描述你对容器的运行要求,创建pod的要求,install-nginx.yaml
+2.使用kubectl命令创建,应用这个资源描述文件 `kubectl create -f install-nginx.yaml`我要创建一个pod运行nginx了,命令发给谁
+3.验证kubectl命令发来的请求是否被允许利用本地https证书直接写入,请求被允许后才会执行
+4.api-server将nginx-pod创建信息,记录到etcd中(镜像版本,容器名,是否端口映射...)
+5.api-server再通知下一个组件,scheduler准备pod调度
+6.scheduler会去etcd查询信息,判定合适的node节点去部署pod(选择好机器,还未执行)
+7.scheduler告诉api-server决定将pod部署在哪个node节点
+8.api-server将信息写入etcd,更新数据
+9.此时api-server会通知远程具体机器,如k8s-node2上的工作进程kubelet,读取etcd信息,进行创建
+'''
+
+### pod
+'''
+1.pod的ip是随机变化的,删除pod,ip变化
+2.pod内都有一个根容器
+3.一个pod内可以有一个,多个容器
+4.一个pod内所有的容器,共享根容器的网络名称空间,文件系统,进程资源
+5.一个pod内的容器网络地址,由根容器提供
+'''
++ pod部署几种形态
+	- 一个pod下一个容器,无状态,无需数据卷
+	- 一个pod下一个容器,持久化容器内数据,以卷的形式,放在宿主机上
+	- 一个pod下多个容器,共享一个卷的数据
+	- 一个pod下多个容器,多个卷 
+
+### 容器运行状态
++ 创建容器是为了运行容器,容器有运行状态,表现为创建的成功 失败 问题
+	- `Waiting` 
+	- `Running`
+	- `Terminated`
+### Label
++ label是识别kubernetes对象的标签,以key-value的方式附加在对象上(key不超过64字节,value可为空,也可不超过253字节的字符串)
++ label不提供唯一性,并且实际上很多对象(如pod)都使用相同label来标识具体应用
++ label定义好后其他对象可以使用Label Selector来选择一组相同的label对象.Label Selector支持以下几种方式:
+	- 等式,如 `app=nginx 或 env!=prod`
+	- 集合,如 `env in (qa,uat)`
+	- 多个label(它们是AND关系) `app=nginx,env = qa`
+'''
+1.label就是标签,用于标识kubernetes对象
+2.我们传统对机器上应用查找,都是基于ip:port,但kubernetes中,更多匹配关系,都是基于label
+'''	
+
+
+### Namespace
++ Namespace是对一组资源和对象的抽象集合,比如可以用来将系统内部的对象划分为不同**资源组**
+	- 常见的pods,services,replication,controller,deployment都属于某个namespace
+	- node,persistentVolumes等则不属于任何namespace
+
+### Controller(Deployment)
++ kubernetes控制器有多种,用在不同场景,如何更好管理pod
+	- `replication controller` 副本控制器,主要控制pod数量
+	- ``
+	- ``
 
 
 
-
-
-
+### Service
