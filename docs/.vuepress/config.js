@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'GENDALI',
+    title: 'GEN',
     description: '积跬步。',
     head: [
         ['link', { rel: 'icon', href: `/favicon.ico` }],// 增加一个自定义的 favicon(网页标签的图标)
