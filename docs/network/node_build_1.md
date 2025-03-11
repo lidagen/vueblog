@@ -25,7 +25,7 @@ localhost:20000
 ````sh
 namesilo 
 
-options-> manager DNS ,
+options-> manager DNS 
 
 | HOSTNAME	| TYPE	| ADDRESS / VALUE	| DISTANCE/PRIO	|TTL	| SERVICE	| EDIT	| DELETE
 | :-----| :---- | :---- |
@@ -36,3 +36,7 @@ options-> manager DNS ,
 + install xui
 + install nginx
 + install 
+
+
+
+https://x.com/0x_Northland/status/18669589283250011

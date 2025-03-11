@@ -108,6 +108,7 @@ spring.rabbitmq.listener.direct.acknowledge-mode=manual
 ### 二、RabbitMQ应用问题
 
 #### 1.消息可靠性保障 `消息补偿机制` 
+
 <img :src="$withBase('/mq/6.png')" alt="dock">
 
 + 第一步，生产者把要发的消息入库，并且发送给队列Q1，Consumer消费消息
