@@ -48,7 +48,7 @@ Node结构,包含三个元素,数据`item`,上一个节点`prev`,下一个节点
 public LinkedList() {
     }
 
-public LinkedList(Collection<? extends E> c) {
+public LinkedList(Collection< extends E> c) {
         this();
         addAll(c);
     }        
@@ -143,16 +143,16 @@ public LinkedList(Collection<? extends E> c) {
     }
   ````
 
-  - <font color=#A23400 >addAll(Collection<? extends E> c)</font>
+  - <font color=#A23400 >addAll(Collection< extends E> c)</font>
   ````java
-  public boolean addAll(Collection<? extends E> c) {
+  public boolean addAll(Collection< extends E> c) {
         return addAll(size, c);
   }
   ````
 
-  - <font color=#A23400 >addAll(int index, Collection<? extends E> c)</font>
+  - <font color=#A23400 >addAll(int index, Collection< extends E> c)</font>
   ````java
-  public boolean addAll(int index, Collection<? extends E> c) {
+  public boolean addAll(int index, Collection< extends E> c) {
     checkPositionIndex(index);//检查越界 [0,size] 闭区间
 
     Object[] a = c.toArray();//转化为数组
@@ -475,7 +475,7 @@ private class ListItr implements ListIterator<E> {
         expectedModCount++;
     }
 
-    public void forEachRemaining(Consumer<? super E> action) {
+    public void forEachRemaining(Consumer< super E> action) {
         Objects.requireNonNull(action);
         while (modCount == expectedModCount && nextIndex < size) {
             action.accept(next.item);

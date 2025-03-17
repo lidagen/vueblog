@@ -1,0 +1,78 @@
+<template><div><h2 id="spring启动初始化数据" tabindex="-1"><a class="header-anchor" href="#spring启动初始化数据"><span>Spring启动初始化数据</span></a></h2>
+<ul>
+<li>我们用 springboot 搭建项目的时候，有时候会碰到在项目启动时初始化一些操作的需求 ，针对这种需求 spring boot为我们提供了以下几种方案供我们选择:
+<ul>
+<li>ApplicationRunner 与 CommandLineRunner 接口</li>
+<li>InitializingBean 接口</li>
+<li>@PostConstruct 注解</li>
+</ul>
+</li>
+</ul>
+<h3 id="applicationrunner与-commandlinerunner" tabindex="-1"><a class="header-anchor" href="#applicationrunner与-commandlinerunner"><span>ApplicationRunner与 CommandLineRunner</span></a></h3>
+<ul>
+<li>我们可以实现 ApplicationRunner 或 CommandLineRunner 接口， 这两个接口工作方式相同，都只提供单一的run方法，该方法在SpringApplication.run(…)完成之前调用</li>
+</ul>
+<div class="language-java line-numbers-mode" data-highlighter="prismjs" data-ext="java"><pre v-pre><code><span class="line"><span class="token annotation punctuation">@Component</span></span>
+<span class="line"><span class="token annotation punctuation">@Log4j2</span></span>
+<span class="line"><span class="token annotation punctuation">@Order</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span></span>
+<span class="line"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MethodApplicationRunner</span>  <span class="token keyword">implements</span> <span class="token class-name">ApplicationRunner</span> <span class="token punctuation">{</span></span>
+<span class="line">    <span class="token annotation punctuation">@Autowired</span></span>
+<span class="line">    <span class="token keyword">private</span> <span class="token class-name">RequestMappingHandlerMapping</span> requestMappingHandlerMapping<span class="token punctuation">;</span></span>
+<span class="line"></span>
+<span class="line">    <span class="token annotation punctuation">@Override</span></span>
+<span class="line">    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">ApplicationArguments</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span></span>
+<span class="line">        log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"MethodApplicationRunner execute ................args:{}"</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">RequestMappingInfo</span><span class="token punctuation">,</span> <span class="token class-name">HandlerMethod</span><span class="token punctuation">></span></span> map <span class="token operator">=</span> requestMappingHandlerMapping<span class="token punctuation">.</span><span class="token function">getHandlerMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">        <span class="token keyword">if</span> <span class="token punctuation">(</span>map <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> map<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">            <span class="token keyword">return</span><span class="token punctuation">;</span></span>
+<span class="line">        <span class="token punctuation">}</span></span>
+<span class="line"></span>
+<span class="line">        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span><span class="token punctuation">></span></span> methodsMap <span class="token operator">=</span> map<span class="token punctuation">.</span><span class="token function">keySet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>requestMappingInfo <span class="token operator">-></span> requestMappingInfo<span class="token punctuation">.</span><span class="token function">getPatternsCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span></span>
+<span class="line">                <span class="token operator">!</span><span class="token class-name">CollectionUtils</span><span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>requestMappingInfo<span class="token punctuation">.</span><span class="token function">getPatternsCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPatterns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span></span>
+<span class="line">                requestMappingInfo<span class="token punctuation">.</span><span class="token function">getPatternsCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPatterns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">findFirst</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isPresent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></span>
+<span class="line">                <span class="token punctuation">.</span><span class="token function">distinct</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toMap</span><span class="token punctuation">(</span></span>
+<span class="line">                        requestMappingInfo <span class="token operator">-></span> requestMappingInfo<span class="token punctuation">.</span><span class="token function">getPatternsCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPatterns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">findFirst</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span></span>
+<span class="line">                        requestMappingInfo <span class="token operator">-></span> requestMappingInfo<span class="token punctuation">.</span><span class="token function">getMethodsCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token class-name">RequestMethod</span><span class="token operator">::</span><span class="token function">name</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token function">toList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span></span>
+<span class="line">                        <span class="token punctuation">(</span>v1<span class="token punctuation">,</span> v2<span class="token punctuation">)</span> <span class="token operator">-></span> v2</span>
+<span class="line">                <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">        log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"collector url and method is:{}"</span><span class="token punctuation">,</span> <span class="token class-name">JSONObject</span><span class="token punctuation">.</span><span class="token function">toJSONString</span><span class="token punctuation">(</span>methodsMap<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul>
+<li>对于这两个接口而言，我们可以通过Order注解或者使用Ordered接口来指定调用顺序， @Order() 中的值越小，优先级越高,Order值相同ApplicationRunner的实现优先执行</li>
+</ul>
+<h3 id="initializingbean" tabindex="-1"><a class="header-anchor" href="#initializingbean"><span>InitializingBean</span></a></h3>
+<ul>
+<li>在spring初始化bean的时候，如果bean实现了 InitializingBean 接口，在对象的所有属性被初始化后之后才会调用afterPropertiesSet()方法</li>
+</ul>
+<div class="language-java line-numbers-mode" data-highlighter="prismjs" data-ext="java"><pre v-pre><code><span class="line"><span class="token annotation punctuation">@Component</span></span>
+<span class="line"><span class="token annotation punctuation">@Slf4j</span></span>
+<span class="line"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SpringInitializing</span> <span class="token keyword">implements</span> <span class="token class-name">InitializingBean</span> <span class="token punctuation">{</span></span>
+<span class="line"></span>
+<span class="line">    <span class="token annotation punctuation">@Override</span></span>
+<span class="line">    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span></span>
+<span class="line">       <span class="token comment">//todo something</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul>
+<li>spring初始化bean肯定会在 ApplicationRunner和CommandLineRunner接口调用之前。</li>
+</ul>
+<h3 id="postconstruct" tabindex="-1"><a class="header-anchor" href="#postconstruct"><span>@PostConstruct</span></a></h3>
+<div class="language-java line-numbers-mode" data-highlighter="prismjs" data-ext="java"><pre v-pre><code><span class="line"><span class="token annotation punctuation">@Component</span></span>
+<span class="line"><span class="token annotation punctuation">@Slf4j</span></span>
+<span class="line"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PostConstructBean</span> <span class="token punctuation">{</span></span>
+<span class="line">  </span>
+<span class="line">    <span class="token annotation punctuation">@PostConstruct</span></span>
+<span class="line">    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span>
+<span class="line">        <span class="token comment">//todo something</span></span>
+<span class="line">    <span class="token punctuation">}</span></span>
+<span class="line"><span class="token punctuation">}</span></span>
+<span class="line"></span></code></pre>
+<div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><ul>
+<li>@PostConstruct会在实现 InitializingBean 接口的afterPropertiesSet()方法之前执行</li>
+</ul>
+</div></template>
+
+

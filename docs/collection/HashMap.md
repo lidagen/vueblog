@@ -78,7 +78,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
         if (o == this)
             return true;
         if (o instanceof Map.Entry) {
-            Map.Entry<?,?> e = (Map.Entry<?,?>)o;
+            Map.Entry<, > e = (Map.Entry<, >)o;
             if (Objects.equals(key, e.getKey()) &&
                 Objects.equals(value, e.getValue()))
                 return true;
@@ -135,7 +135,7 @@ public HashMap() {
     this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
 }
 
-public HashMap(Map<? extends K, ? extends V> m) {
+public HashMap(Map< extends K,   extends V> m) {
     this.loadFactor = DEFAULT_LOAD_FACTOR;
     //入参map加入表中
     putMapEntries(m, false);
@@ -150,17 +150,17 @@ static final int tableSizeFor(int cap) {
     n |= n >>> 4;
     n |= n >>> 8;
     n |= n >>> 16;
-    return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    return (n < 0)   1 : (n >= MAXIMUM_CAPACITY)   MAXIMUM_CAPACITY : n + 1;
 }
 
-final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
+final void putMapEntries(Map< extends K,   extends V> m, boolean evict) {
     int s = m.size();
     if (s > 0) {
          // 判断table是否已经初始化
         if (table == null) { 
          // 未初始化，s为m的实际元素个数
             float ft = ((float)s / loadFactor) + 1.0F;
-            int t = ((ft < (float)MAXIMUM_CAPACITY) ?
+            int t = ((ft < (float)MAXIMUM_CAPACITY)  
                         (int)ft : MAXIMUM_CAPACITY);
             // 计算得到的t大于阈值，则初始化阈值            
             if (t > threshold)
@@ -170,7 +170,7 @@ final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
         else if (s > threshold)
             resize();
         // 将m中的所有元素添加至HashMap中    
-        for (Map.Entry<? extends K, ? extends V> e : m.entrySet()) {
+        for (Map.Entry< extends K,   extends V> e : m.entrySet()) {
             K key = e.getKey();
             V value = e.getValue();
             putVal(hash(key), key, value, false, evict);
@@ -230,9 +230,9 @@ final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
     return null;
   }
   ````
-  - <font color=#A23400 >putAll(Map<? extends K, ? extends V> m)</font>
+  - <font color=#A23400 >putAll(Map< extends K,   extends V> m)</font>
   ````java
-  public void putAll(Map<? extends K, ? extends V> m) {
+  public void putAll(Map< extends K,   extends V> m) {
     putMapEntries(m, true);
   }
   ````
@@ -241,7 +241,7 @@ final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
   ````java
   public V remove(Object key) {
     Node<K,V> e;
-    return (e = removeNode(hash(key), key, null, false, true)) == null ?
+    return (e = removeNode(hash(key), key, null, false, true)) == null  
         null : e.value;
   }
   //removeNode
@@ -338,7 +338,7 @@ final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
   ```java
   public V get(Object key) {
         Node<K,V> e;
-        return (e = getNode(hash(key), key)) == null ? null : e.value;
+        return (e = getNode(hash(key), key)) == null   null : e.value;
     }
   ```
 

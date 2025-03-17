@@ -11,7 +11,7 @@
     实现了此接口,for 循环遍历,否则 Iterator 迭代遍历查找元素。
     ````java
     public static <T>
-    int binarySearch(List<? extends Comparable<? super T>> list, T key) {
+    int binarySearch(List ? extends Comparable ? super T list, T key) {
         if (list instanceof RandomAccess || list.size()<BINARYSEARCH_THRESHOLD)
             return Collections.indexedBinarySearch(list, key);
         else
@@ -82,7 +82,7 @@
         }
     }
   /**使用集合类来构建ArrayList**/
-  public ArrayList(Collection<? extends E> c) {
+  public ArrayList(Collection< extends E> c) {
         elementData = c.toArray();
         //因为size代表的是集合元素数量，通过集合类构造ArrayList时,给size赋值
         if ((size = elementData.length) != 0) {
@@ -123,9 +123,9 @@
     }
     ````
 
-    + <font color=#A23400 >addAll(Collection<? extends E> c)</font>
+    + <font color=#A23400 >addAll(Collection< extends E> c)</font>
     ````java
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(Collection< extends E> c) {
         Object[] a = c.toArray();
         int numNew = a.length;
         ensureCapacityInternal(size + numNew);  // 判断是否需要扩容
@@ -134,9 +134,9 @@
         return numNew != 0;
     }
     ````
-    + <font color=#A23400 >addAll(int index, Collection<? extends E> c) </font>
+    + <font color=#A23400 >addAll(int index, Collection< extends E> c) </font>
     ````java
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, Collection< extends E> c) {
         rangeCheckForAdd(index);//检查index是否越界
 
         Object[] a = c.toArray();
@@ -209,17 +209,17 @@
     }
   ````
 
-  - <font color=#A23400 >removeAll(Collection<?> c)</font> 剔除在指定集合中的元素
+  - <font color=#A23400 >removeAll(Collection<> c)</font> 剔除在指定集合中的元素
   ````java
-  public boolean removeAll(Collection<?> c) {
+  public boolean removeAll(Collection<> c) {
         Objects.requireNonNull(c);//判断元素不为null
         return batchRemove(c, false);
     }
   ````
 
-  - <font color=#A23400 >retainAll(Collection<?> c)</font> 剔除不在指定集合的元素
+  - <font color=#A23400 >retainAll(Collection<> c)</font> 剔除不在指定集合的元素
   ````java
-  public boolean retainAll(Collection<?> c) {
+  public boolean retainAll(Collection<> c) {
         Objects.requireNonNull(c);
         return batchRemove(c, true);
     }
@@ -237,10 +237,10 @@
         elementData[--size] = null; // clear to let GC do its work
     }
   ````
-  `batchRemove(Collection<?> c, boolean complement)` 集合操作： `removeAll(Collection<?> c)` 和 `retainAll(Collection<?> c)`都用了此方法，区别是
+  `batchRemove(Collection<> c, boolean complement)` 集合操作： `removeAll(Collection<> c)` 和 `retainAll(Collection<> c)`都用了此方法，区别是
   第二个参数一个是 *true* 一个 *false*
   ````java
-  private boolean batchRemove(Collection<?> c, boolean complement) {
+  private boolean batchRemove(Collection<> c, boolean complement) {
         final Object[] elementData = this.elementData;
         int r = 0, w = 0;//w 代表批量删除后 数组还剩多少元素
         boolean modified = false;
@@ -364,4 +364,3 @@ private class ListItr extends Itr implements ListIterator<E> {
   + **增加**会因为**扩容**导致数组复制, 以及**增加，删除**都会调用`System.arraycopy`实现数组之间的复制。相对低效
 
 
- <Valine></Valine>
