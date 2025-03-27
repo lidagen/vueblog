@@ -2,19 +2,19 @@ export const redirects = JSON.parse("{}")
 
 export const routes = Object.fromEntries([
   ["/", { loader: () => import(/* webpackChunkName: "index.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/index.html.js"), meta: {"title":"Home"} }],
+  ["/airdrop/env.html", { loader: () => import(/* webpackChunkName: "airdrop_env.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/airdrop/env.html.js"), meta: {"title":""} }],
+  ["/airdrop/network.html", { loader: () => import(/* webpackChunkName: "airdrop_network.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/airdrop/network.html.js"), meta: {"title":""} }],
   ["/build/docker.html", { loader: () => import(/* webpackChunkName: "build_docker.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/docker.html.js"), meta: {"title":""} }],
   ["/build/dockerAliyun.html", { loader: () => import(/* webpackChunkName: "build_dockerAliyun.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/dockerAliyun.html.js"), meta: {"title":""} }],
   ["/build/dockerCompose.html", { loader: () => import(/* webpackChunkName: "build_dockerCompose.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/dockerCompose.html.js"), meta: {"title":""} }],
   ["/build/k8s.html", { loader: () => import(/* webpackChunkName: "build_k8s.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/k8s.html.js"), meta: {"title":""} }],
   ["/build/nginx.html", { loader: () => import(/* webpackChunkName: "build_nginx.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/nginx.html.js"), meta: {"title":""} }],
   ["/build/nginx1.html", { loader: () => import(/* webpackChunkName: "build_nginx1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/build/nginx1.html.js"), meta: {"title":""} }],
-  ["/book/heapStackMethod.html", { loader: () => import(/* webpackChunkName: "book_heapStackMethod.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/book/heapStackMethod.html.js"), meta: {"title":""} }],
-  ["/book/springInAction.html", { loader: () => import(/* webpackChunkName: "book_springInAction.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/book/springInAction.html.js"), meta: {"title":""} }],
   ["/activiti/act1.html", { loader: () => import(/* webpackChunkName: "activiti_act1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/activiti/act1.html.js"), meta: {"title":""} }],
   ["/activiti/actControl.html", { loader: () => import(/* webpackChunkName: "activiti_actControl.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/activiti/actControl.html.js"), meta: {"title":""} }],
   ["/activiti/actDB.html", { loader: () => import(/* webpackChunkName: "activiti_actDB.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/activiti/actDB.html.js"), meta: {"title":""} }],
   ["/activiti/actVariable.html", { loader: () => import(/* webpackChunkName: "activiti_actVariable.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/activiti/actVariable.html.js"), meta: {"title":""} }],
-  ["/db/mysql1.html", { loader: () => import(/* webpackChunkName: "db_mysql1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/db/mysql1.html.js"), meta: {"title":""} }],
+  ["/crypto/crypto%20%E5%A5%97%E5%88%A9.html", { loader: () => import(/* webpackChunkName: "crypto_crypto 套利.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/crypto/crypto 套利.html.js"), meta: {"title":""} }],
   ["/collection/ArrayList.html", { loader: () => import(/* webpackChunkName: "collection_ArrayList.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/ArrayList.html.js"), meta: {"title":""} }],
   ["/collection/BigDecimal.html", { loader: () => import(/* webpackChunkName: "collection_BigDecimal.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/BigDecimal.html.js"), meta: {"title":""} }],
   ["/collection/HashMap.html", { loader: () => import(/* webpackChunkName: "collection_HashMap.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/HashMap.html.js"), meta: {"title":""} }],
@@ -28,14 +28,15 @@ export const routes = Object.fromEntries([
   ["/collection/classloader.html", { loader: () => import(/* webpackChunkName: "collection_classloader.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/classloader.html.js"), meta: {"title":""} }],
   ["/collection/reflect.html", { loader: () => import(/* webpackChunkName: "collection_reflect.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/reflect.html.js"), meta: {"title":""} }],
   ["/collection/time.html", { loader: () => import(/* webpackChunkName: "collection_time.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/collection/time.html.js"), meta: {"title":""} }],
+  ["/db/mysql1.html", { loader: () => import(/* webpackChunkName: "db_mysql1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/db/mysql1.html.js"), meta: {"title":""} }],
+  ["/book/heapStackMethod.html", { loader: () => import(/* webpackChunkName: "book_heapStackMethod.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/book/heapStackMethod.html.js"), meta: {"title":""} }],
+  ["/book/springInAction.html", { loader: () => import(/* webpackChunkName: "book_springInAction.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/book/springInAction.html.js"), meta: {"title":""} }],
   ["/design/adapter.html", { loader: () => import(/* webpackChunkName: "design_adapter.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/adapter.html.js"), meta: {"title":""} }],
   ["/design/decorator.html", { loader: () => import(/* webpackChunkName: "design_decorator.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/decorator.html.js"), meta: {"title":""} }],
   ["/design/factory.html", { loader: () => import(/* webpackChunkName: "design_factory.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/factory.html.js"), meta: {"title":""} }],
   ["/design/observer.html", { loader: () => import(/* webpackChunkName: "design_observer.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/observer.html.js"), meta: {"title":""} }],
   ["/design/singleton.html", { loader: () => import(/* webpackChunkName: "design_singleton.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/singleton.html.js"), meta: {"title":""} }],
   ["/design/template.html", { loader: () => import(/* webpackChunkName: "design_template.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/design/template.html.js"), meta: {"title":""} }],
-  ["/airdrop/env.html", { loader: () => import(/* webpackChunkName: "airdrop_env.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/airdrop/env.html.js"), meta: {"title":""} }],
-  ["/airdrop/network.html", { loader: () => import(/* webpackChunkName: "airdrop_network.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/airdrop/network.html.js"), meta: {"title":""} }],
   ["/elk/elasticJob.html", { loader: () => import(/* webpackChunkName: "elk_elasticJob.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/elk/elasticJob.html.js"), meta: {"title":""} }],
   ["/elk/es0.html", { loader: () => import(/* webpackChunkName: "elk_es0.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/elk/es0.html.js"), meta: {"title":""} }],
   ["/elk/es1.html", { loader: () => import(/* webpackChunkName: "elk_es1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/elk/es1.html.js"), meta: {"title":""} }],
@@ -122,6 +123,7 @@ export const routes = Object.fromEntries([
   ["/rabbitmq/rb3.html", { loader: () => import(/* webpackChunkName: "rabbitmq_rb3.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/rabbitmq/rb3.html.js"), meta: {"title":""} }],
   ["/shell/shell.html", { loader: () => import(/* webpackChunkName: "shell_shell.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/shell/shell.html.js"), meta: {"title":""} }],
   ["/shell/shell1.html", { loader: () => import(/* webpackChunkName: "shell_shell1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/shell/shell1.html.js"), meta: {"title":""} }],
+  ["/solidity/solidity_foundation.html", { loader: () => import(/* webpackChunkName: "solidity_solidity_foundation.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/solidity/solidity_foundation.html.js"), meta: {"title":""} }],
   ["/spring/applicationContext.html", { loader: () => import(/* webpackChunkName: "spring_applicationContext.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/spring/applicationContext.html.js"), meta: {"title":""} }],
   ["/spring/dispatcherServlet.html", { loader: () => import(/* webpackChunkName: "spring_dispatcherServlet.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/spring/dispatcherServlet.html.js"), meta: {"title":""} }],
   ["/spring/springAlibaba1.html", { loader: () => import(/* webpackChunkName: "spring_springAlibaba1.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/spring/springAlibaba1.html.js"), meta: {"title":""} }],
@@ -149,3 +151,20 @@ export const routes = Object.fromEntries([
   ["/spring/springSource/springBoot.html", { loader: () => import(/* webpackChunkName: "spring_springSource_springBoot.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/spring/springSource/springBoot.html.js"), meta: {"title":""} }],
   ["/404.html", { loader: () => import(/* webpackChunkName: "404.html" */"/home/wangs/Documents/fontrepo/vueblog/docs/.vuepress/.temp/pages/404.html.js"), meta: {"title":""} }],
 ]);
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updateRoutes) {
+    __VUE_HMR_RUNTIME__.updateRoutes(routes)
+  }
+  if (__VUE_HMR_RUNTIME__.updateRedirects) {
+    __VUE_HMR_RUNTIME__.updateRedirects(redirects)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ routes, redirects }) => {
+    __VUE_HMR_RUNTIME__.updateRoutes(routes)
+    __VUE_HMR_RUNTIME__.updateRedirects(redirects)
+  })
+}

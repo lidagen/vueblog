@@ -20,6 +20,9 @@ git commit -m 'deploy'
 # git push -f https://github.com/lidagen/lidagen.github.io.git master
 git push -f git@github.com:lidagen/lidagen.github.io.git master
 
+current_time=$(date "+%Y-%m-%d %H:%M:%S")
+
+cli push --title "vueblog deploy" --content "Deploy time is $current_time"
 
 # git push -f https://gitee.com/GENDALI/lidagen.github.io.git master
 
