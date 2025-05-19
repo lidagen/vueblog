@@ -273,7 +273,7 @@ export default defineUserConfig({
         text: 'English',
         collapsible: true,
         children: [
-          { link: '/english/grammer', text: '时态' },
+          { link: '/english/verbTenses', text: '时态' },
         ]
       }
 
