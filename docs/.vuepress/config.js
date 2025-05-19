@@ -265,6 +265,15 @@ export default defineUserConfig({
         collapsible: true,
         children: [
           { link: '/solidity/solidity_foundation', text: 'Solidity 基础' },
+          { link: '/solidity/solidity_ERC-20', text: 'Solidity ERC-20' },
+        ]
+      }
+      ,
+      {
+        text: 'English',
+        collapsible: true,
+        children: [
+          { link: '/english/grammer', text: '时态' },
         ]
       }
 
