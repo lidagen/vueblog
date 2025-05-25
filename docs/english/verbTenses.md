@@ -7,7 +7,7 @@
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | 现在      | do/does       | am/is/are doing       | have/has done       | have/has been doing       |
 | 过去   | did        | was/were doing       | had done       | had been doing       |
-| 将来   | will/be going to        | will be doing       | will have done       | will have been doing       |
+| 将来   | will do/be going to        | will be doing       | will have done       | will have been doing       |
 | 过去将来   | would do/was going to        | would be doing       | would have done       | would have been doing       |
 
 ## 现在时态

@@ -266,6 +266,8 @@ export default defineUserConfig({
         children: [
           { link: '/solidity/solidity_foundation', text: 'Solidity 基础' },
           { link: '/solidity/solidity_ERC-20', text: 'Solidity ERC-20' },
+          { link: '/solidity/wtf101', text: 'Solidity 101' },
+
         ]
       }
       ,

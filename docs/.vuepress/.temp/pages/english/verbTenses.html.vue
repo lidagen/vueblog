@@ -29,7 +29,7 @@
 </tr>
 <tr>
 <td>将来</td>
-<td>will/be going to</td>
+<td>will do/be going to</td>
 <td>will be doing</td>
 <td>will have done</td>
 <td>will have been doing</td>
